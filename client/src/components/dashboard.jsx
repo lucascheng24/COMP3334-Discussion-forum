@@ -73,7 +73,7 @@ class Dashboard extends Component {
                   <Link to="/new-post">
                     <button
                       type="button"
-                      class="btn btn-success"
+                      className="btn btn-success"
                       style={{ marginBottom: 20 }}
                     >
                       New Post

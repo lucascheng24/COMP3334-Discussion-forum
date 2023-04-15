@@ -8,7 +8,7 @@ const NavBar = ({ user }) => {
         Community
       </NavLink>
       <button
-        class="navbar-toggler"
+        className="navbar-toggler"
         type="button"
         data-toggle="collapse"
         data-target="#navbarSupportedContent"

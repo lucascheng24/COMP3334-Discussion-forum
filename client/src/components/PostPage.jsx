@@ -106,7 +106,7 @@ class PostPage extends Component {
               <p>{post.views} Views</p>
             </div>
             <div
-              class="d-flex w-100 justify-content-between"
+              className="d-flex w-100 justify-content-between"
               style={{ color: "#505050" }}
             >
               <div>
@@ -147,7 +147,7 @@ class PostPage extends Component {
                     <HandThumbsUpFill className="mr-2" />
                     {reply.upvotes.length}
                   </button>
-                  <p class="mb-1">
+                  <p className="mb-1">
                     <Moment fromNow style={{ color: "#505050" }}>
                       {reply.time}
                     </Moment>
