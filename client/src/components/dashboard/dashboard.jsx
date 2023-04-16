@@ -67,8 +67,7 @@ class Dashboard extends Component {
                   <Link to="/new-post">
                     <button
                       type="button"
-                      className="btn btn-success"
-                      style={{ marginBottom: 20 }}
+                      className="btn btn-success btn-main "
                     >
                       New Post
                     </button>
@@ -81,14 +80,13 @@ class Dashboard extends Component {
         <div className="container">
           <div className="row">
             <div className="col">
-              <div className="d-flex w-100 justify-content-between m-3">
+              <div className="d-flex w-100 justify-content-between m-3 msg">
                 Showing {filtered.length} posts.
                 {user && (
                   <Link to="/new-post">
                     <button
                       type="button"
-                      className="btn btn-success"
-                      style={{ marginBottom: 20 }}
+                      className="btn btn-success btn-main "
                     >
                       New Post
                     </button>
@@ -99,7 +97,7 @@ class Dashboard extends Component {
           </div>
           <div className="row">
             <div className="col-9">
-              <Posts posts={posts}/>
+              <Posts className="post" posts={posts}/>
             </div>
             <div className="col-3">
               <ListGroup
