@@ -78,7 +78,6 @@ class Dashboard extends Component {
       </p>;
     return (
       <React.Fragment>
-        <Jumotron />
         <div className="container">
           <div className="row">
             <div className="col">
