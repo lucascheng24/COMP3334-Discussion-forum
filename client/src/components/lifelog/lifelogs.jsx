@@ -8,103 +8,36 @@ import { api } from "../../config.js";
 import http from "../../services/httpService";
 import Jumotron from "../common/jumbotron";
 
-class LifeLogs extends Component {
-  state = {
-    allposts: [],
-    currentPage: 1,
-    pageSize: 4,
-    tags: [],
-    selectedTag: { _id: "1", name: "All Posts" },
-  };
-  async componentDidMount() {
-    const { data: allposts } = await http.get(api.postsEndPoint);
-    const { data: tags } = await http.get(api.tagsEndPoint);
-
-    this.setState({
-      allposts: [...allposts],
-      tags: [
-        {
-          _id: "1",
-          name: "All Posts",
-        },
-        ...tags,
-      ],
-    });
-  }
-  handlePageChange = (page) => {
-    this.setState({ currentPage: page });
-  };
-  handlePostDelete = (post) => {};
-  handleTagSelect = (tag) => {
-    this.setState({ selectedTag: tag, currentPage: 1 });
-  };
-  getPosts() {
-    const { allposts, selectedTag } = this.state;
-    const filtered = [];
-    for (let i in allposts) {
-      const post = allposts[i];
-      const { tags } = post;
-      for (let j in tags) {
-        if (tags[j].name === selectedTag.name) {
-          filtered.push(post);
-          break;
-        }
-      }
-    }
-    console.log(filtered);
-    return filtered;
-  }
-  render() {
-    const { user } = this.props;
-    const { allposts, pageSize, currentPage, tags, selectedTag } = this.state;
-    const filtered = selectedTag._id === "1" ? allposts : this.getPosts();
-    const posts = paginate(filtered, currentPage, pageSize);
-    if (allposts.length === 0)
-      return <p>There are no posts in the database!</p>;
-    return (
-      <React.Fragment>
-        <Jumotron />
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <div className="d-flex w-100 justify-content-between m-3">
-                Showing {filtered.length} posts.
-                {user && (
-                  <Link to="/new-post">
-                    <button
-                      type="button"
-                      className="btn btn-success"
-                      style={{ marginBottom: 20 }}
-                    >
-                      New Post
-                    </button>
-                  </Link>
-                )}
-              </div>
-            </div>
+const LifeLogs = (props) => {
+  const { lifelogs, logger } = props;
+  return (
+    <div className="list-group">
+      {/* reverse the posts: from new to old */}
+      {lifelogs.slice(0).reverse().map((lifelog) => (
+        <div className="list-group-item list-group-item-action flex-column align-items-start">
+        {/* <Link
+          to={`/post/${lifelog._id}`}
+        > */}
+          <div className="d-flex w-100 justify-content-between" key={lifelog._id}>
+            <h5 className="mb-1">{lifelog.title}</h5>
           </div>
-          <div className="row">
-            <div className="col-9">
-              <Posts posts={posts} onDelete={this.handlePostDelete} />
-            </div>
-            <div className="col-3">
-              <ListGroup
-                items={tags}
-                selectedTag={this.state.selectedTag}
-                onTagSelect={this.handleTagSelect}
-              />
-            </div>
-            <Pagination
-              itemCount={filtered.length}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={this.handlePageChange}
-            />
+          <small>Created by {logger}</small>
+          <br />
+          <small className="overflow-hidden">{lifelog.description}</small>
+          <div className="mt-1">
+            {/* Related Topics:
+            {post.tags.map((tag) => (
+              <span className="badge badge-secondary m-1 p-2">{tag.name}</span>
+            ))} */}
+            <h6 className="mt-2">
+              {lifelog.upvotes.length} Likes
+            </h6>
           </div>
+        {/* </Link> */}
         </div>
-      </React.Fragment>
-    );
-  }
-}
+      ))}
+    </div>
+  );
+};
 
-export default Dashboard;
+export default LifeLogs;

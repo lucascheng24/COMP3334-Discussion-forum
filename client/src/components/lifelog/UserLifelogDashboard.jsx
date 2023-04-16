@@ -6,13 +6,13 @@ import { paginate } from "../../utils/paginate";
 import { api } from "../../config.js";
 import http from "../../services/httpService";
 import Jumotron from "../common/jumbotron";
+import Lifelogs from './lifelogs'
 
 class UserLifelogDashboard extends Component {
   state = {
     alllifelogs: [],
     currentPage: 1,
     pageSize: 4,
-    tags: [],
     selectedTag: { _id: "1", name: "All lifelogs" },
   };
   async componentDidUpdate() {
@@ -25,7 +25,7 @@ class UserLifelogDashboard extends Component {
     var lifelogs = [];
 
     if (selectedUser) {
-      const { data: lifelogs } = selectedUser ? await http.get(`${api.lifelogEndPoint}${selectedUser}`) : [];
+      const { data: lifelogs } = selectedUser ? await http.get(`${api.lifelogEndPoint}/get/${selectedUser}`) : [];
 
       this.setState({
         ...this.state,
@@ -58,7 +58,7 @@ class UserLifelogDashboard extends Component {
     console.log('selectedUser: ', selectedUser)
 
     const { user } = this.props;
-    const { alllifelogs, pageSize, currentPage, tags, selectedTag } = this.state;
+    const { alllifelogs, pageSize, currentPage, selectedTag } = this.state;
     const filtered = alllifelogs && alllifelogs.length > 1 ? alllifelogs : this.getlifelogs(selectedUser);
     const lifelogs = paginate(filtered, currentPage, pageSize);
 
@@ -97,7 +97,7 @@ class UserLifelogDashboard extends Component {
                       className="btn btn-success"
                       style={{ marginBottom: 20 }}
                     >
-                      New Post
+                      New lifelog
                     </button>
                   </Link>
                 )}
@@ -106,14 +106,14 @@ class UserLifelogDashboard extends Component {
           </div>
           <div className="row">
             <div className="col-9">
-              <lifelogs lifelogs={lifelogs} onDelete={this.handlePostDelete} />
+              <Lifelogs lifelogs={filtered} logger={selectedUser} onDelete={this.handlePostDelete} />
             </div>
             <div className="col-3">
-              <ListGroup
+              {/* <ListGroup
                 items={tags}
                 selectedTag={this.state.selectedTag}
                 onTagSelect={this.handleTagSelect}
-              />
+              /> */}
             </div>
             <Pagination
               itemCount={filtered.length}

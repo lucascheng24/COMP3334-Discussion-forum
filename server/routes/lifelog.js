@@ -37,6 +37,7 @@ router.get("/me", auth, async (req, res) => {
 });
 
 router.post("/create", auth, async (req, res) => {
+  console.log('/create')
   const { error } = validateLifelog(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   // const tags = req.body.tags;
@@ -61,58 +62,32 @@ router.post("/create", auth, async (req, res) => {
   }
 });
 
-router.get("/get/:id", auth, async (req, res) => {
-  const { error } = validateLifelog(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-  // const tags = req.body.tags;
-  // const tags_array = [];
-  // for (let i = 0; i < tags.length; i++) {
-  //   const tag_in_db = await Tag.findById(tags[i]);
-  //   if (!tag_in_db) return res.status(400).send("Invalid Tag");
-  //   tags_array.push(tag_in_db);
-  // }
-  const lifelog = new Lifelog({
-    title: req.body.title,
-    description: req.body.description,
-    author: req.user._id,
-  });
-  try {
-    await lifelog.save();
-    console.log(lifelog);
-    res.send("lifelog succesfully created.");
-  } catch (err) {
-    console.log("save lifelog error");
-    console.log("error: ", err);
-  }
-});
 
-
-router.get("/get/:username", async (req, res) => {
+router.get("/get/:id", async (req, res) => {
   try {
-    const user = await User.find({ username: req.params.username })
+    console.log('/get/:username')
+    console.log('req.params')
+    console.log(req.params)
+    console.log(req.params.id)
+    const user = await User.findOne({ username: req.params.id })
 
     if (user) {
       console.log(user._id)
       console.log(user.name)
       console.log(user.email)
 
-      const all_logs = await Lifelog.find({ author: user._id })
+      if (user._id) {
+        const all_logs = await Lifelog.find({ author: user._id })
 
-      if (all_logs) {
-        console.log(all_logs)
-
-        res.send(all_logs)
+        if (all_logs) {
+          console.log(all_logs)
+  
+          res.send(all_logs)
+          return
+        }
       }
-
     }
-    
-
-
-
-    // const views = post[0].views;
-    // post[0].views = views + 1;
-    // const result = await post[0].save();
-    res.send({});
+    res.send([]);
   } catch (ex) {
     return res.send(ex.message);
   }
