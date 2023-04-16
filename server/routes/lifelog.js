@@ -46,16 +46,24 @@ router.post("/create", auth, async (req, res) => {
   //   const tag_in_db = await Tag.findById(tags[i]);
   //   if (!tag_in_db) return res.status(400).send("Invalid Tag");
   //   tags_array.push(tag_in_db);
+
+  // console.log(req)
   // }
-  const lifelog = new Lifelog({
-    title: req.body.title,
-    description: req.body.description,
-    author: req.user._id,
-  });
   try {
-    await lifelog.save();
-    console.log(lifelog);
-    res.send("lifelog succesfully created.");
+    const user = await User.findOne({ username: req.body.author })
+
+    if (user && user.username) {
+      const lifelog = new Lifelog({
+        title: req.body.title,
+        description: req.body.description,
+        author: user._id,
+      });
+
+      await lifelog.save();
+      console.log(lifelog);
+      res.send("lifelog succesfully created.");
+      return
+    }
   } catch (err) {
     console.log("save lifelog error");
     console.log("error: ", err);

@@ -25,10 +25,6 @@ const LifeLogs = (props) => {
           <br />
           <small className="overflow-hidden">{lifelog.description}</small>
           <div className="mt-1">
-            {/* Related Topics:
-            {post.tags.map((tag) => (
-              <span className="badge badge-secondary m-1 p-2">{tag.name}</span>
-            ))} */}
             <h6 className="mt-2">
               {lifelog.upvotes.length} Likes
             </h6>

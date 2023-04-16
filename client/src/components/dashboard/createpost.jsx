@@ -49,7 +49,9 @@ class NewPost extends Form {
       const { response } = await createpost(data);
       console.log(response);
       window.location = "/dashboard";
-    } catch (ex) {}
+    } catch (ex) {
+      toast.error(ex);
+    }
   };
   render() {
     const { data, errors, tags } = this.state;
