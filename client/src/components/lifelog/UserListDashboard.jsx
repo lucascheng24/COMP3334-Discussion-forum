@@ -38,7 +38,7 @@ class UserListDashboard extends Component {
     const { allusers, pageSize, currentPage } = this.state;
     // const filtered = allusers && allusers.length > 1 ? allusers : this.getPosts();
     const allusersList = allusers && allusers.length > 1 ? allusers : this.getUsers();
-    const users = paginate(allusersList, currentPage, pageSize);
+    // const users = paginate(allusersList, currentPage, pageSize);
 
 
 
@@ -59,13 +59,13 @@ class UserListDashboard extends Component {
           <div className="row">
             <div className="col">
               <div className="d-flex w-100 justify-content-between m-3">
-                Showing {users.length} users.
+                Showing {allusersList.length} users.
               </div>
             </div>
           </div>
           <div className="row">
             <div className="col-9">
-              <UserItems users={users}  />
+              <UserItems users={allusersList}  />
             </div>
             <div className="col-3">
               {/* <ListGroup
@@ -74,12 +74,12 @@ class UserListDashboard extends Component {
                 onTagSelect={this.handleTagSelect}
               /> */}
             </div>
-            <Pagination
+            {/* <Pagination
               itemCount={users.length}
               pageSize={pageSize}
               currentPage={currentPage}
               onPageChange={this.handlePageChange}
-            />
+            /> */}
           </div>
         </div>
       </React.Fragment>
