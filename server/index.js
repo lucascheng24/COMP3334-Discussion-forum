@@ -22,8 +22,11 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("could not connect to mongoDB")).finally(() =>{
+  .catch((err) => console.error("could not connect to mongoDB"))
+  .finally(() =>{
+    
     mongoose.connection.close()
+    console.log("Closed MongoDB connection")
   });
 
 app.use(express.json());
