@@ -1,9 +1,9 @@
 import React from "react";
-import Input from "./common/input";
-import Form from "./common/form";
+import Input from "../common/input";
+import Form from "../common/form";
 import Joi from "joi-browser";
 import { Redirect } from "react-router-dom";
-import * as userService from "../services/userService";
+import * as userService from "../../services/userService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/react-toastify.esm";
 

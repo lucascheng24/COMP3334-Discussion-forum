@@ -3,8 +3,8 @@ import Moment from "react-moment";
 import "moment-timezone";
 import { PersonCircle, HandThumbsUpFill } from "react-bootstrap-icons";
 import { ToastContainer, toast } from "react-toastify";
-import http from "../services/httpService";
-import { api } from "../config.js";
+import http from "../../services/httpService";
+import { api } from "../../config.js";
 import PostReply from "./createReply";
 
 class PostPage extends Component {

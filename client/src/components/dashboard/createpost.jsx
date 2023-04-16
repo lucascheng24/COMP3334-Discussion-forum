@@ -1,11 +1,11 @@
 import React from "react";
 import Joi from "joi-browser";
 import { ToastContainer, toast } from "react-toastify";
-import Input from "./common/input";
-import Form from "./common/form";
-import http from "../services/httpService";
-import { api } from "../config.js";
-import { createpost } from "../services/postCreateService";
+import Input from "../common/input";
+import Form from "../common/form";
+import http from "../../services/httpService";
+import { api } from "../../config.js";
+import { createpost } from "../../services/postCreateService";
 
 class NewPost extends Form {
   state = {

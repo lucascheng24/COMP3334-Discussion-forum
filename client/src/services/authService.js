@@ -7,3 +7,11 @@ export function login(email, password) {
     password: password,
   });
 }
+
+
+export function getAllUsers(email, password) {
+  return http.get(api.usersEndPoint + "AllUsers", {
+    email: email,
+    password: password,
+  });
+}

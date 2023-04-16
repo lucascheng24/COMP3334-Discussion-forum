@@ -2,10 +2,10 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import Joi from "joi-browser";
 import { ToastContainer, toast } from "react-toastify";
-import "../App.css";
-import Input from "../components/common/input";
-import Form from "./common/form";
-import { login } from "../services/authService";
+import "../../App.css";
+import Input from "../common/input";
+import Form from "../common/form";
+import { login } from "../../services/authService";
 
 // use programmatic navigation form login form to dashboard
 

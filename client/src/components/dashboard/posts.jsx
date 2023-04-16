@@ -5,7 +5,9 @@ const Posts = (props) => {
   const { posts } = props;
   return (
     <div className="list-group">
-      {posts.map((post) => (
+      {/* reverse the posts: from new to old */}
+      {posts.slice(0).reverse().map((post) => (
+      // {posts.map((post) => (
         <Link
           className="list-group-item list-group-item-action flex-column align-items-start"
           to={`/post/${post._id}`}

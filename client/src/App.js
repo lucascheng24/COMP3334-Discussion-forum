@@ -5,16 +5,16 @@ import { Route, Switch, Redirect } from "react-router-dom";
 
 import http from "./services/httpService";
 import { api } from "./config.js";
-import Dashboard from "./components/dashboard";
+import Dashboard from "./components/dashboard/dashboard";
 import Jumotron from "./components/common/jumbotron";
 import NotFound from "./components/not-found";
-import NewPost from "./components/createpost";
-import Log from "./components/log";
-import Logout from "./components/logout";
-import Register from "./components/register";
+import NewPost from "./components/dashboard/createpost";
+import Log from "./components/auth/log";
+import Logout from "./components/auth/logout";
+import Register from "./components/auth/register";
 import NavBar from "./components/navbar";
 import ProtectedRoute from "./components/common/protectedRoute";
-import PostPage from "./components/PostPage";
+import PostPage from "./components/dashboard/PostPage";
 
 class App extends Component {
   state = {};
@@ -29,18 +29,22 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NavBar user={this.state.user} />
+        <NavBar user={this.state.user} />{" "}
         {/* on the dashboard, have a quesry string parameter to 
-       to find the method of sorting of posts.(using query string package) */}
+                                               to find the method of sorting of posts.(using query string package) */}{" "}
         <Switch>
-          <Route path="/users/login" component={Log} />
-          <Route path="/users/register" component={Register} />
-          <Route path="/users/logout" component={Logout} />
+          <Route path="/users/login" component={Log} />{" "}
+          <Route path="/users/register" component={Register} />{" "}
+          <Route path="/users/logout" component={Logout} />{" "}
           <Route
             path="/dashboard"
             render={(props) => <Dashboard {...props} user={this.state.user} />}
           />
-          <Route path="/not-found" component={NotFound} />
+          <Route
+            path="/lifelog"
+            render={(props) => <Dashboard {...props} user={this.state.user} />}
+          />
+          <Route path="/not-found" component={NotFound} />{" "}
           <ProtectedRoute
             path="/new-post"
             render={(props) => <NewPost {...props} user={this.state.user} />}
@@ -49,10 +53,10 @@ class App extends Component {
             path="/post/:id"
             render={(props) => <PostPage {...props} user={this.state.user} />}
           />
-          <Route exact path="/" component={Jumotron} />
+          <Route exact path="/" component={Jumotron} />{" "}
           <Redirect from="/users" to="/users/login " />
           <Redirect to="/not-found" />
-        </Switch>
+        </Switch>{" "}
       </div>
     );
   }
