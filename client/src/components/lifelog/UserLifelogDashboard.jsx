@@ -16,7 +16,7 @@ const UserLifelogDashboard = ({ user, match }) => {
   const [alllifelogs, setAllLifelogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(4);
-  const [selectedTag, setSelectedTag] = useState({ _id: "1", name: "All lifelogs" });
+  // const [selectedTag, setSelectedTag] = useState({ _id: "1", name: "All lifelogs" });
   const [showModal, setShowModal] = useState(false);
   const [inputTitle, setInputTitle] = useState("");
   const [inputDescription, setInputDescription] = useState("");
@@ -47,18 +47,17 @@ const UserLifelogDashboard = ({ user, match }) => {
 
   function handlePostDelete(post) {}
 
-  function handleTagSelect(tag) {
-    setSelectedTag(tag);
-    setCurrentPage(1);
-  }
+  // function handleTagSelect(tag) {
+  //   setSelectedTag(tag);
+  //   setCurrentPage(1);
+  // }
 
   const current_path = window.location.pathname;
   const selectedUser = current_path.replace("/personallifelog/", "");
 
   console.log("selectedUser: ", selectedUser);
 
-  const filtered = alllifelogs && alllifelogs.length > 1 ? alllifelogs : [];
-  const lifelogs = paginate(filtered, currentPage, pageSize);
+  // const lifelogs = paginate(alllifelogs, currentPage, pageSize);
 
   console.log("UserLifelogDashboard");
 
@@ -88,7 +87,7 @@ const UserLifelogDashboard = ({ user, match }) => {
             setInputTitle("");
             setInputDescription("");
             getlifelogs(selectedUser);
-            
+
           } else {
             toast.error('Network error');
             setShowModal(false);
@@ -108,7 +107,7 @@ const UserLifelogDashboard = ({ user, match }) => {
       <p>
         There are no lifelogs in the database!
         <div className="d-flex w-100 justify-content-between m-3">
-          {user && user.username == selectedUser && (
+          {user && user.username === selectedUser && (
             <Button className="btn btn-success" variant="primary" onClick={() => setShowModal(true)}>
               New Lifelog
             </Button>
@@ -125,30 +124,27 @@ const UserLifelogDashboard = ({ user, match }) => {
       <Jumotron title={`Life logs of ${selectedUser}`} />
       <div className="row">
         <div className="col-3">
-          <ListGroup
-            items={alllifelogs}
-            selectedItem={selectedTag}
-            onItemSelect={handleTagSelect}
-          />
         </div>
         <div className="col">
-          {user && user.username == selectedUser && (
+          {user && user.username === selectedUser && (
             <Button className="btn btn-success" variant="primary" onClick={() => setShowModal(true)}>
               New Lifelog
             </Button>
           )}
           <Lifelogs
-            lifelogs={lifelogs}
+            lifelogs={alllifelogs}
             onDelete={handlePostDelete}
             user={user}
             selectedUser={selectedUser}
           />
-          <Pagination
-            itemsCount={filtered.length}
+          {/* <Pagination
+            itemsCount={alllifelogs.length}
             currentPage={currentPage}
             pageSize={pageSize}
             onPageChange={handlePageChange}
-          />
+          /> */}
+        </div>
+        <div className="col-3">
         </div>
       </div>
       <Modal show={showModal} onHide={handleModalClose}>
