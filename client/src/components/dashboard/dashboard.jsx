@@ -34,7 +34,7 @@ class Dashboard extends Component {
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
-  handlePostDelete = (post) => {};
+
   handleTagSelect = (tag) => {
     this.setState({ selectedTag: tag, currentPage: 1 });
   };
@@ -99,7 +99,7 @@ class Dashboard extends Component {
           </div>
           <div className="row">
             <div className="col-9">
-              <Posts posts={posts} onDelete={this.handlePostDelete} />
+              <Posts posts={posts}/>
             </div>
             <div className="col-3">
               <ListGroup

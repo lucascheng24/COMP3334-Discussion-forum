@@ -45,10 +45,6 @@ class App extends Component {
             path="/lifelog"
             render={(props) => <UserListDashboard {...props} user={this.state.user} />}
           />
-          <Route
-            path="/lifelog/:selectedUser"
-            render={(props) => <UserLifelogDashboard {...props} user={this.state.user} />}
-          />
           <Route path="/not-found" component={NotFound} />{" "}
           <ProtectedRoute
             path="/new-post"
@@ -57,6 +53,10 @@ class App extends Component {
           <Route
             path="/post/:id"
             render={(props) => <PostPage {...props} user={this.state.user} />}
+          />
+          <Route
+            path="/personallifelog/:username"
+            render={(props) => <UserLifelogDashboard {...props} user={this.state.user} />}
           />
           <Route exact path="/" component={Jumotron} />{" "}
           <Redirect from="/users" to="/users/login " />

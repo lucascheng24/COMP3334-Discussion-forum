@@ -5,12 +5,10 @@ const UserItems = (props) => {
   const { users } = props;
   return (
     <div className="list-group">
-      {/* reverse the posts: from new to old */}
       {users.map((user) => (
-      // {posts.map((post) => (
         <Link
           className="list-group-item list-group-item-action flex-column align-items-start"
-          to={`/lifelog/${user.username}`}
+          to={`/personallifelog/${user.username}`}
         >
           <div className="d-flex w-100 justify-content-between" key={user.username}>
             <h5 className="mb-1">{user.name}</h5>
@@ -23,3 +21,4 @@ const UserItems = (props) => {
 };
 
 export default UserItems;
+

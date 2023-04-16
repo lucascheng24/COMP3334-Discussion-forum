@@ -19,22 +19,29 @@ class UserLifelogDashboard extends Component {
     console.log('enter UserLifelogDashboard')
   }
 
-  async componentDidUpdate(prevProps) {
-    const { selectedUser } = this.props.match.params;
-  
-    if (prevProps.match.params.selectedUser !== selectedUser) {
-      console.log('enter UserLifelogDashboard');
-      const lifelogs = await this.getlifelogs(selectedUser);
-      this.setState({ ...this.state, alllifelogs: lifelogs });
+  async getlifelogs(selectedUser) {
+    console.log('get life logs from ', selectedUser)
+
+    var lifelogs = [];
+
+    if (selectedUser) {
+      const { data: lifelogs } = selectedUser ? await http.get(`${api.lifelogEndPoint}${selectedUser}`) : [];
+
+      this.setState({
+        ...this.state,
+        alllifelogs: lifelogs
+      });
     }
+
+    return lifelogs
   }
 
-  async componentDidMount() {
-    const selectedUser = this.props.match.params.selectedUser;
-    const { data: lifelogs } = await http.get(api.lifelogEndPoint + selectedUser);
-    // const { data: replies } = await http.get(api.repliesEndPoint  + id);
-    this.setState({ ...this.state, alllifelogs: lifelogs });
-  }
+  // async componentDidMount() {
+  //   const selectedUser = this.props.match.params.selectedUser;
+  //   const { data: lifelogs } = this.getlifelogs(selectedUser);
+  //   // const { data: replies } = await http.get(api.repliesEndPoint  + id);
+  //   this.setState({ ...this.state, alllifelogs: lifelogs });
+  // }
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
@@ -42,21 +49,11 @@ class UserLifelogDashboard extends Component {
   handleTagSelect = (tag) => {
     this.setState({ selectedTag: tag, currentPage: 1 });
   };
-  async getlifelogs(selectedUser) {
-    console.log('get life logs from ', selectedUser)
-    const { data: lifelogs } = await http.get(`${api.lifelogEndPoint}${selectedUser}`);
-
-    this.setState({
-      ...this.state,
-      alllifelogs: lifelogs
-    });
-
-    return lifelogs
-  }
+  
   render() {
 
     const current_path = window.location.pathname
-    const selectedUser = current_path.replace('/lifelog/', '')
+    const selectedUser = current_path.replace('/personallifelog/', '')
 
     console.log('selectedUser: ', selectedUser)
 
