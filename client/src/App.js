@@ -2,7 +2,6 @@ import "./App.css";
 import React, { Component } from "react";
 import jwtDecode from "jwt-decode";
 import { Route, Switch, Redirect } from "react-router-dom";
-
 import http from "./services/httpService";
 import { api } from "./config.js";
 import Dashboard from "./components/dashboard/dashboard";
@@ -15,6 +14,8 @@ import Register from "./components/auth/register";
 import NavBar from "./components/navbar";
 import ProtectedRoute from "./components/common/protectedRoute";
 import PostPage from "./components/dashboard/PostPage";
+import UserListDashboard from './components/lifelog/UserListDashboard'
+import UserLifelogDashboard from './components/lifelog/UserLifelogDashboard'
 
 class App extends Component {
   state = {};
@@ -42,7 +43,11 @@ class App extends Component {
           />
           <Route
             path="/lifelog"
-            render={(props) => <Dashboard {...props} user={this.state.user} />}
+            render={(props) => <UserListDashboard {...props} user={this.state.user} />}
+          />
+          <Route
+            path="/lifelog/:selectedUser"
+            render={(props) => <UserLifelogDashboard {...props} user={this.state.user} />}
           />
           <Route path="/not-found" component={NotFound} />{" "}
           <ProtectedRoute

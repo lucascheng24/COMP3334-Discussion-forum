@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../common/pagination";
 import ListGroup from "../listgroup";
-import Posts from "../dashboard/posts";
+import UserItems from "./userItems";
 import { paginate } from "../../utils/paginate";
 import { api } from "../../config.js";
 import http from "../../services/httpService";
@@ -13,53 +13,43 @@ class UserListDashboard extends Component {
     allusers: [],
     currentPage: 1,
     pageSize: 4,
-    // tags: [],
-    // selectedTag: { _id: "1", name: "All Posts" },
   };
   async componentDidMount() {
-    const { data: allusers } = await http.get(api.postsEndPoint);
-    // const { data: tags } = await http.get(api.tagsEndPoint);
+    const { data: allusers } = await http.get(`${api.lifelogEndPoint}all`);
 
     this.setState({
       allusers: [...allusers],
-      // tags: [
-      //   {
-      //     _id: "1",
-      //     name: "All Posts",
-      //   },
-      //   ...tags,
-      // ],
     });
   }
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
   handlePostDelete = (post) => {};
-  // handleTagSelect = (tag) => {
-  //   this.setState({ selectedTag: tag, currentPage: 1 });
-  // };
-  
-  getPosts() {
-    const { allusers } = this.state;
-    const filtered = [];
-    for (let i in allusers) {
-      const post = allusers[i];
-      // const { tags } = post;
-      // for (let j in tags) {
-      //   if (tags[j].name === selectedTag.name) {
-      //     filtered.push(post);
-      //     break;
-      //   }
-      // }
-    }
-    console.log(filtered);
-    return filtered;
+
+  async getUsers() {
+    const { data: allusers } = await http.get(`${api.lifelogEndPoint}all`);
+
+    this.setState({
+      allusers: [...allusers],
+    });
   }
   render() {
     const { user } = this.props;
     const { allusers, pageSize, currentPage } = this.state;
-    const filtered = allusers && allusers.length > 1 ? allusers : this.getPosts();
-    const posts = paginate(filtered, currentPage, pageSize);
+    // const filtered = allusers && allusers.length > 1 ? allusers : this.getPosts();
+    const allusersList = allusers && allusers.length > 1 ? allusers : this.getUsers();
+    const users = paginate(allusersList, currentPage, pageSize);
+
+
+
+    // const { data: allusers } = await getAllUsers(user.) 
+    // http.get(api.postsEndPoint);
+    // const { data: jwt } = await login(data.email, data.password);
+    // const { data: tags } = await http.get(api.tagsEndPoint);
+
+
+
+
     if (allusers.length === 0)
       return <p>There are no user here!</p>;
     return (
@@ -69,24 +59,13 @@ class UserListDashboard extends Component {
           <div className="row">
             <div className="col">
               <div className="d-flex w-100 justify-content-between m-3">
-                Showing {filtered.length} posts.
-                {user && (
-                  <Link to="/new-post">
-                    <button
-                      type="button"
-                      className="btn btn-success"
-                      style={{ marginBottom: 20 }}
-                    >
-                      New Post
-                    </button>
-                  </Link>
-                )}
+                Showing {users.length} users.
               </div>
             </div>
           </div>
           <div className="row">
             <div className="col-9">
-              <Posts posts={posts} onDelete={this.handlePostDelete} />
+              <UserItems users={users}  />
             </div>
             <div className="col-3">
               {/* <ListGroup
@@ -96,7 +75,7 @@ class UserListDashboard extends Component {
               /> */}
             </div>
             <Pagination
-              itemCount={filtered.length}
+              itemCount={users.length}
               pageSize={pageSize}
               currentPage={currentPage}
               onPageChange={this.handlePageChange}
@@ -108,4 +87,4 @@ class UserListDashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default UserListDashboard;
