@@ -109,7 +109,10 @@ class Dashboard extends Component {
                     </button>
                   </Link>
 
-                  <Button onClick={() => startAnimation()} >Simulation</Button>
+                  <button 
+                type="button"
+                className="btn btn-newpost btn-primary"
+                onClick={() => startAnimation()} >Simulation</button>
                   </>
                   
                 )}
