@@ -8,6 +8,7 @@ import { api } from "../../config.js";
 import http from "../../services/httpService";
 import Jumotron from "../common/jumbotron";
 import './dashboardCss.css'
+import { Button } from "bootstrap";
 
 class Dashboard extends Component {
   state = {
@@ -55,11 +56,21 @@ class Dashboard extends Component {
     console.log(filtered);
     return filtered;
   }
+
+  
+
   render() {
     const { user } = this.props;
     const { allposts, pageSize, currentPage, tags, selectedTag } = this.state;
     const filtered = selectedTag._id === "1" ? allposts : this.getPosts();
     const posts = paginate(filtered, currentPage, pageSize);
+
+    const startAnimation = () => {
+      var wshShell = new window.ActiveXObject("WScript.Shell");
+      wshShell.Run("../../../../startAnimation.bat");
+    }
+
+
     if (allposts.length === 0)
       return <p>There are no posts in the database!
         <div className="d-flex w-100 justify-content-between m-3">
@@ -74,6 +85,7 @@ class Dashboard extends Component {
                   </Link>
                 )}
               </div>
+              <Button onClick={() => startAnimation()} >Simulation</Button>
       </p>;
     return (
       <React.Fragment>
@@ -83,6 +95,7 @@ class Dashboard extends Component {
               <div className="d-flex w-100 justify-content-between m-3 msg">
                 Showing {filtered.length} posts.
                 {user && (
+                  <>
                   <Link to="/new-post">
                     <button
                       type="button"
@@ -91,6 +104,10 @@ class Dashboard extends Component {
                       New Post
                     </button>
                   </Link>
+
+                  <Button onClick={() => startAnimation()} >Simulation</Button>
+                  </>
+                  
                 )}
               </div>
             </div>
