@@ -6,6 +6,7 @@ import "../../App.css";
 import Input from "../common/input";
 import Form from "../common/form";
 import { login } from "../../services/authService";
+import {GenRSAKeypair, RsaEncrypt, RsaDecrypt, SaveKeyAndDownload} from '../common/rsaKeyFunc'
 
 // use programmatic navigation form login form to dashboard
 
@@ -42,6 +43,39 @@ class Log extends Form {
       return <Redirect to="/dashboard" />;
     }
     const { data, errors } = this.state;
+
+    const handleFileInputChange = (event) => {
+
+      let privateKey = ''
+
+      console.log(event)
+              console.log('event.target.value')
+              console.log(event.target.value)
+
+              const file = event.target.files[0];
+              const reader = new FileReader();
+              reader.onload = function(event) {
+                privateKey = event.target.result;
+                console.log(privateKey);
+
+                try {
+                  const dec = RsaDecrypt('j0LTtjBrY5EJMDjkrHFKVD4koyFq6F1cjvetAPMgtVEv5YZnGl4dVfI8TOQEBDfCE8gOOEyAU0i1E8IZOsNS3M0ZqMqp9Oged93SVAdJUWNsqa/uGZJZLyEpXcj8eTDmSgu8X0z7yDwLpWVdMGQBYkZr6+87LK9ghcYbTEw8LEvGeQfcb5yrWN/7z06oAWepFOMuGaM18UCFlefBzeA1xpkxSa/SJYhhI1xM/In8xDdEXMrBAAw6rNvGQb8gqSzcxEJ6vRgNFTgNn6+CwOGb0lH7NAjlmUNuqd7mEr5E1TJW6fTY4MYMQrjgspsGFSnrN1nfEnchBUrVeT6ERqA4Cw==', privateKey)
+
+                  console.log(dec)
+                  
+                } catch (error) {
+                  console.log('decrypt error')
+                  console.log(error)
+                }
+                
+              };
+              reader.readAsText(file);
+
+              
+        
+    }
+
+
     return (
       <div>
         <div className="container col-lg-3 col-md-6 border rounded mt-3">
@@ -63,6 +97,7 @@ class Log extends Form {
               error={errors.password}
               type="password"
             />
+            <Input label="Drag your private key file here" type="file" onChange={handleFileInputChange} />
             <div className="text-center">
               <button
                 className="btn btn-primary m-3"

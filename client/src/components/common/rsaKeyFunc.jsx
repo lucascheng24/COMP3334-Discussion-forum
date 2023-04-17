@@ -12,14 +12,24 @@ export const GenRSAKeypair = () => {
     }
 
 }
-
 export const RsaEncrypt = (plainText, publicKeyStr) => {
-    return crypto.AES.encrypt(plainText, publicKeyStr).toString();
+    const publicKey = forge.pki.publicKeyFromPem(publicKeyStr);
+    const encrypted = publicKey.encrypt(plainText);
+    return forge.util.encode64(encrypted);
 }
 
 export const RsaDecrypt = (decryptData, privateKeyStr) => {
-    return crypto.AES.decrypt(decryptData.toString(), privateKeyStr).toString();
-}
+    try {
+        // console.log(privateKeyStr)
+      const privateKey = forge.pki.privateKeyFromPem(privateKeyStr);
+      const decrypted = privateKey.decrypt(forge.util.decode64(decryptData));
+    //   console.log(JSON.stringify(decrypted));
+      return decrypted;
+    } catch (error) {
+      console.log('decrypt error');
+      console.log(error);
+    }
+};
 
 //  save key and download as txt
 export const SaveKeyAndDownload = (keyStr, fileName) => {
@@ -44,7 +54,27 @@ export const SaveKeyAndDownload = (keyStr, fileName) => {
     URL.revokeObjectURL(keyUrl);
 };
 
+// export const RsaEncrypt = (plainText, publicKeyStr) => {
+//     return crypto.AES.encrypt(plainText, publicKeyStr).toString();
+// }
 
+
+
+// export const RsaDecrypt = (decryptData, privateKeyStr) => {
+    
+//     try {
+
+//         const dec = crypto.AES.decrypt(decryptData, privateKeyStr);
+//         console.log(dec.toString(crypto.enc.Utf8))
+//         return dec
+//     } catch (error) {
+//         console.log('decrypt error')
+//         console.log(error)
+//     }
+
+
+     
+// }
 // // Generate RSA key pair
         // const keyPair = forge.pki.rsa.generateKeyPair({ bits: 2048 });
         // const publicKeyPem = forge.pki.publicKeyToPem(keyPair.publicKey);

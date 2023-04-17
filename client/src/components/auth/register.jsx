@@ -66,6 +66,9 @@ class Register extends Form {
   
         const response = await userService.register(registerBody);
         console.log(response);
+        SaveKeyAndDownload(response.data.publicKeyUser, 'serverPublicKey')
+        
+        
         localStorage.setItem("token", response.headers["x-auth-token"]);
         window.location = "/dashboard";
       } catch (ex) {
