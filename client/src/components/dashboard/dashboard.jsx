@@ -113,7 +113,7 @@ const Dashboard = ({ user }) => {
         </div>
         <button 
           type="button"
-          className="btn btn-success"
+          className="btn btn-primary btn-sim"
           onClick={() => startAnimation()} >
           Simulation
         </button>
@@ -140,7 +140,7 @@ const Dashboard = ({ user }) => {
                   </Link>
                   <button 
                     type="button"
-                    className="btn btn-success btn-primary"
+                    className="btn btn-primary btn-sim"
                     onClick={() => startAnimation()} >
                     Simulation
                   </button>
@@ -263,7 +263,7 @@ export default Dashboard;
 //               </div>
 //               <button 
 //                 type="button"
-//                 className="btn btn-newpost"
+//                 className="btn btn-sim btn-primar"
 //                 onClick={() => startAnimation()} >Simulation</button>
 //       </p>;
 //     return (
@@ -286,7 +286,7 @@ export default Dashboard;
 
 //                   <button 
 //                 type="button"
-//                 className="btn btn-newpost btn-primary"
+//                 className="btn btn-sim btn-primary"
 //                 onClick={() => startAnimation()} >Simulation</button>
 //                   </>
                   
