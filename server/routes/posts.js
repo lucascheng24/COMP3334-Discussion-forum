@@ -32,13 +32,6 @@ router.get("/", async (req, res) => {
       } else {
         res.status(400).send("b/e error");
       }
-      // console.log(all_posts)
-      // all_posts.array().forEach(element => {
-      //   decrypt_posts.append(RsaDecrypt(JSON.stringify(element), publicKeyUser))   
-      // });
-
-      
-      // res.send({decrypt_posts: decrypt_posts});
     }
   } else {
     res.status(400).send("missing jwt");

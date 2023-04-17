@@ -11,6 +11,7 @@ const isAdmin = require("../middleware/admin");
 const { valid } = require("joi");
 const router = express.Router();
 const { Lifelog, validateLifelog } = require("../models/lifelog");
+const {GenRSAKeypair, RsaEncrypt, RsaDecrypt} = require('../common/rsaKeyFunc')
 
 // get all user
 router.get("/all", async (req, res) => {
@@ -73,29 +74,72 @@ router.post("/create", auth, async (req, res) => {
 
 router.get("/get/:id", async (req, res) => {
   try {
-    console.log('/get/:username')
-    console.log('req.params')
-    console.log(req.params)
-    console.log(req.params.id)
-    const user = await User.findOne({ username: req.params.id })
+    const token = req.headers['x-auth-token']
+    const decrypted_jwt = jwt.decode(token)
 
-    if (user) {
-      console.log(user._id)
-      console.log(user.name)
-      console.log(user.email)
 
-      if (user._id) {
-        const all_logs = await Lifelog.find({ author: user._id })
-
-        if (all_logs) {
-          console.log(all_logs)
+    if (decrypted_jwt && decrypted_jwt._id) {
+      let current_user = await User.findById(decrypted_jwt._id);
   
-          res.send(all_logs)
-          return
-        }
+      if (current_user && current_user.publicKeyUser) {
+        const publicKeyUser = current_user.publicKeyUser
+
+        const lifelogOwner = await User.findOne({ username: req.params.id })
+
+        if (lifelogOwner) {
+          console.log(lifelogOwner._id)
+          console.log(lifelogOwner.name)
+          console.log(lifelogOwner.email)
+    
+          if (lifelogOwner._id) {
+            const all_logs = await Lifelog.find({ author: lifelogOwner._id })
+    
+            if (all_logs && Array.isArray(all_logs)) {
+
+              const encrypt_posts = []
+              all_logs.forEach(element => {
+                encrypt_posts.push(RsaEncrypt(JSON.stringify(element), publicKeyUser))
+              });
+              res.send({encrypt_posts: encrypt_posts});
+      
+              // res.send(all_logs)
+              return
+            } else {
+              res.status(400).send("b/e error");
+            }
+          }
+        }        
       }
+    } else {
+      res.status(400).send("missing jwt");
     }
-    res.send([]);
+
+    // console.log('/get/:username')
+    // console.log('req.params')
+    // console.log(req.params)
+    // console.log(req.params.id)
+    // const user = await User.findOne({ username: req.params.id })
+
+    // if (user) {
+    //   console.log(user._id)
+    //   console.log(user.name)
+    //   console.log(user.email)
+
+    //   if (user._id) {
+    //     const all_logs = await Lifelog.find({ author: user._id })
+
+    //     if (all_logs) {
+    //       // console.log(all_logs)
+  
+    //       res.send(all_logs)
+    //       return
+    //     }
+    //   }
+    // }
+    // res.send([]);
+
+
+
   } catch (ex) {
     return res.send(ex.message);
   }
