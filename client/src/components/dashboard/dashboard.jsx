@@ -8,7 +8,7 @@ import { api } from "../../config.js";
 import http from "../../services/httpService";
 import Jumotron from "../common/jumbotron";
 import './dashboardCss.css'
-import { Button } from "bootstrap";
+import { Button } from "react-bootstrap";
 
 class Dashboard extends Component {
   state = {
