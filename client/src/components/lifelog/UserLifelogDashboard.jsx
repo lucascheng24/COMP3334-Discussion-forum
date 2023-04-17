@@ -11,6 +11,8 @@ import Modal from "react-bootstrap/Modal";
 import Input from "../common/input";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/react-toastify.esm";
+import {GenRSAKeypair, RsaEncrypt, RsaDecrypt, SaveKeyAndDownload} from '../common/rsaKeyFunc'
+import Cookies from "universal-cookie";
 
 const UserLifelogDashboard = ({ user, match }) => {
   const [alllifelogs, setAllLifelogs] = useState([]);
@@ -20,6 +22,7 @@ const UserLifelogDashboard = ({ user, match }) => {
   const [showModal, setShowModal] = useState(false);
   const [inputTitle, setInputTitle] = useState("");
   const [inputDescription, setInputDescription] = useState("");
+  const cookies = new Cookies();
 
   useEffect(() => {
     console.log("enter UserLifelogDashboard");
@@ -31,9 +34,30 @@ const UserLifelogDashboard = ({ user, match }) => {
     if (selectedUser) {
       const { data: lifelogs } = await http.get(
         `${api.lifelogEndPoint}/get/${selectedUser}`
-      );
+      ).then(res => {
+        console.log(res.data.encrypt_posts)
 
-      setAllLifelogs(lifelogs);
+        const userPrivateKeyStr = cookies.get('userPrivateKeyStr')
+
+        if (userPrivateKeyStr) {
+  
+          const enc_posts =  res.data.encrypt_posts
+          const dec_logs = [];
+  
+          if(Array.isArray(enc_posts)) {
+            enc_posts.forEach(ele => {
+              const log = RsaDecrypt(ele, userPrivateKeyStr)
+              dec_logs.push(JSON.parse(log))
+            })
+          }
+          console.log(dec_logs)
+  
+          setAllLifelogs(dec_logs);
+          return dec_logs
+        }
+      });
+
+      // setAllLifelogs(lifelogs);
     }
   }
 
