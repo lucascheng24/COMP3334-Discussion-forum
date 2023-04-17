@@ -47,7 +47,7 @@ class PostPage extends Component {
   handleUpvote = async () => {
     try {
       const { data: post } = await http.put(
-        api.postEndPoint + "like/" + this.props.match.params.id,
+        api.postsEndPoint + "like/" + this.props.match.params.id,
         {}
       );
       console.log(post);
