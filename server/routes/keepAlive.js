@@ -70,7 +70,7 @@ router.post("/login1", async (req, res) => {
   }
 });
 
-router.post("/login1", async (req, res) => {
+router.post("/login2", async (req, res) => {
 
   try {
     if (!req.body) {
