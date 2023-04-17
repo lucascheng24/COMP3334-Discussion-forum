@@ -17,7 +17,7 @@ import {
 } from "../common/rsaKeyFunc";
 import Cookies from "universal-cookie";
 import axios from "axios";
-import bcrypt from 'bcrypt'
+import { SHA256 } from 'crypto-js';
 
 // use programmatic navigation form login form to dashboard
 
@@ -60,7 +60,7 @@ class Log extends Form {
         }
       });
 
-      const user_hash_pw = await bcrypt.hash(data.password, 10)
+      const user_hash_pw = SHA256(data.password).toString()
       const ciphertext = caesarCipherEncrypt(userPublicKeyStr, user_hash_pw)
       
 
@@ -68,7 +68,7 @@ class Log extends Form {
       const { data: jwt } = await http_alive.post(api.keepAliveEndPoint + 'login1', {
         email: data.email,
         pwEncPuk: ciphertext
-      }).then((response) => {
+      }).then(async (response) => {
         console.log(response.data.pw_enc_puk_enc_R);
 
         const w_enc_Puk_enc_R = response.data.pw_enc_puk_enc_R
@@ -81,13 +81,17 @@ class Log extends Form {
 
 
         // Make the second request
-        http_alive.post(api.keepAliveEndPoint + 'login2', {
+        return http_alive.post(api.keepAliveEndPoint + 'login2', {
           //  send R
           email: data.email,
           challenge_R: dec_challenge_R
         }).then((response) => {
+          console.log('second request R');
           console.log(response.data);
           return response.data
+
+
+
         }).catch((error) => {
           console.log(error);
         });

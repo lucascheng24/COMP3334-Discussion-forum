@@ -11,6 +11,7 @@ const isAdmin = require("../middleware/admin");
 const { valid } = require("joi");
 const router = express.Router();
 const {GenRSAKeypair, RsaEncrypt} = require('../common/rsaKeyFunc')
+const  { SHA256 }  = require("crypto-js");
 
 router.post("/register", async (req, res) => {
   const { error } = validateUser(req.body);
@@ -27,7 +28,7 @@ router.post("/register", async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     username: req.body.username,
-    password: await bcrypt.hash(req.body.password, 10),
+    password: SHA256(req.body.password).toString(),
     publicKeyUser: req.body.publicKeyUser,
     publicKeyServer: server_keyPair.publicKey,
     privateKeyServer: server_keyPair.privateKey
@@ -68,7 +69,9 @@ router.post("/login", async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (!user) return res.status(400).send("Invalid email or password");
 
-  const validpassword = await bcrypt.compare(req.body.password, user.password);
+  const hash_pw = SHA256(req.body.password).toString()
+
+  const validpassword = hash_pw === user.password;
   if (!validpassword) return res.status(400).send("invalid email or password");
 
   const token = jwt.sign(
