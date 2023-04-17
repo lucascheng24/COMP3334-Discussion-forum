@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
   privateKeyServer: {
     type: String,
     required: true,
+  },
+  temp_challengeR: {
+    type: String,
+    maxlength: 128,
   }
 });
 const User = mongoose.model("User", userSchema);

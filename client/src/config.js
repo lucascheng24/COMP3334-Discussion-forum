@@ -4,4 +4,5 @@ export const api = {
   postsEndPoint: 'http://localhost:5000/posts/',
   repliesEndPoint: 'http://localhost:5000/reply/',
   lifelogEndPoint: 'http://localhost:5000/lifelog/',
+  keepAliveEndPoint: 'http://localhost:5000/keepAlive/',
 }

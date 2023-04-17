@@ -11,6 +11,9 @@ var httpServer = http.createServer(processRequest);
 
 
 var port = Math.floor(Math.random()*(7000-5000)) + 5000;
+// Enable HTTP keep-alive
+server.keepAliveTimeout = 60 * 1000; // 1 minute
+server.headersTimeout = 65 * 1000; // 65 seconds
 
 // Specify a listening interface
 httpServer.listen(port, function() {
@@ -43,6 +46,17 @@ function processRequest(request, response) {
         "xml": "text/xml"
     };
 
+
+    // Handle the request
+    if (req.url === '/api/data1') {
+        // Respond to the first request
+        res.end('Response to the first request');
+    } else if (req.url === '/api/data2') {
+        // Respond to the second request
+        res.end('Response to the second request');
+    }
+
+    
     // Cut out the identifier string inside the request
     var requestUrl = request.url;
     //url模块的parse方法 接受一个字符串，返回一个url对象,切出来路径
@@ -64,6 +78,8 @@ function processRequest(request, response) {
 
     // Use "text/plain" for all unknown types
     var contentType = mime[ext] || "text/plain";
+
+    // do keep-alive
 
     fs.stat(filePath, (err, stats) => {
         if (err) {

@@ -54,6 +54,42 @@ export const SaveKeyAndDownload = (keyStr, fileName) => {
     URL.revokeObjectURL(keyUrl);
 };
 
+// Define the encryption function
+export const caesarCipherEncrypt = (message, key) => {
+  const shift = parseInt(key) % 26;
+  return message
+    .split('')
+    .map(char => {
+      const code = char.charCodeAt(0);
+      if (code >= 65 && code <= 90) {
+        return String.fromCharCode(((code - 65 + shift) % 26) + 65);
+      } else if (code >= 97 && code <= 122) {
+        return String.fromCharCode(((code - 97 + shift) % 26) + 97);
+      } else {
+        return char;
+      }
+    })
+    .join('');
+}
+
+// Define the decryption function
+export const caesarCipherDecrypt = (message, key) => {
+  const shift = parseInt(key) % 26;
+  return message
+    .split('')
+    .map(char => {
+      const code = char.charCodeAt(0);
+      if (code >= 65 && code <= 90) {
+        return String.fromCharCode(((code - 65 - shift + 26) % 26) + 65);
+      } else if (code >= 97 && code <= 122) {
+        return String.fromCharCode(((code - 97 - shift + 26) % 26) + 97);
+      } else {
+        return char;
+      }
+    })
+    .join('');
+}
+
 // export const RsaEncrypt = (plainText, publicKeyStr) => {
 //     return crypto.AES.encrypt(plainText, publicKeyStr).toString();
 // }

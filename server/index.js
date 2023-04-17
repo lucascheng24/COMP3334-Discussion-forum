@@ -10,6 +10,7 @@ const posts = require("./routes/posts");
 const tags = require("./routes/tags");
 const replies = require("./routes/replies");
 const lifelog = require("./routes/lifelog")
+const keepAlive = require("./routes/keepAlive")
 const app = express();
 
 
@@ -34,11 +35,20 @@ app.get("/", (req, res) => {
   res.send("request successfully sent!");
 });
 
+// // Middleware function to enable HTTP keep-alive for specific requests
+// app.use((req, res, next) => {
+//   if (req.headers === '/keep-alive' && req.method === 'GET') {
+//     res.setHeader('Connection', 'keep-alive');
+//   }
+//   next();
+// });
+
 app.use("/users", users);
 app.use("/posts", posts);
 app.use("/tags", tags);
 app.use("/reply", replies);
 app.use("/lifelog", lifelog)
+app.use("/keepAlive", keepAlive)
 
 const port = process.env.PORT || 4000;
 

@@ -6,13 +6,18 @@ import "../../App.css";
 import Input from "../common/input";
 import Form from "../common/form";
 import { login } from "../../services/authService";
+import { api } from "../../config";
 import {
   GenRSAKeypair,
   RsaEncrypt,
   RsaDecrypt,
   SaveKeyAndDownload,
+  caesarCipherEncrypt,
+  caesarCipherDecrypt
 } from "../common/rsaKeyFunc";
 import Cookies from "universal-cookie";
+import axios from "axios";
+import bcrypt from 'bcrypt'
 
 // use programmatic navigation form login form to dashboard
 
@@ -36,6 +41,7 @@ class Log extends Form {
 
       const cookies = new Cookies();
       const userPrivateKeyStr = cookies.get('userPrivateKeyStr')
+      const userPublicKeyStr = cookies.get('userPublicKeyStr')
 
       if (!!!userPrivateKeyStr) {
         toast.error("Please put your private key file before login");
@@ -45,12 +51,54 @@ class Log extends Form {
       const { data } = this.state;
       
 
-      const { data: jwt } = await login(data.email, data.password);
+      // const { data: jwt } = await login(data.email, data.password);
+
+      // Create an Axios instance with the Connection header set to keep-alive
+      const http_alive = axios.create({
+        headers: {
+          'Connection': 'keep-alive'
+        }
+      });
+
+      const user_hash_pw = await bcrypt.hash(data.password, 10)
+      const ciphertext = caesarCipherEncrypt(userPublicKeyStr, user_hash_pw)
+      
+
+      // Make the first request
+      const { data: jwt } = await http_alive.post(api.keepAliveEndPoint + 'login1', {
+        email: data.email,
+        pwEncPuk: ciphertext
+      }).then((response) => {
+        console.log(response.data.pw_enc_puk_enc_R);
+
+        const w_enc_Puk_enc_R = response.data.pw_enc_puk_enc_R
+
+        const Puk_enc_R = caesarCipherDecrypt(w_enc_Puk_enc_R, user_hash_pw)
+
+        const dec_challenge_R = RsaDecrypt(Puk_enc_R, userPrivateKeyStr)
+
+        console.log('challenge_R: ', dec_challenge_R)
+
+
+        // Make the second request
+        http_alive.post(api.keepAliveEndPoint + 'login2', {
+          //  send R
+          email: data.email,
+          challenge_R: dec_challenge_R
+        }).then((response) => {
+          console.log(response.data);
+          return response.data
+        }).catch((error) => {
+          console.log(error);
+        });
+      }).catch((error) => {
+        console.log(error);
+      });
 
       // localStorage.setItem("token", jwt);
       cookies.set("token", jwt, 
-          { path: '/', secure: true, sameSite :true}
-        );
+        { path: '/', secure: true, sameSite :true}
+      );
       const { state } = this.props.location;
 
       window.location = state ? state.from.pathname : "/users/login";
@@ -137,11 +185,11 @@ class Log extends Form {
               onChange={handlePrivateFileInputChange}
             />
             <br></br>
-            {/* <Input
-              label="Drag server public key file here"
+            <Input
+              label="Drag your public key file here"
               type="file"
               onChange={handlePublicFileInputChange}
-            /> */}
+            />
             <div className="text-center">
               <button
                 className="btn btn-primary m-3"
