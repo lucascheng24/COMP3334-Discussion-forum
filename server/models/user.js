@@ -34,6 +34,18 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  publicKeyUser: {
+    type: String,
+    required: true,
+  },
+  publicKeyServer: {
+    type: String,
+    required: true,
+  },
+  privateKeyServer: {
+    type: String,
+    required: true,
+  }
 });
 const User = mongoose.model("User", userSchema);
 
