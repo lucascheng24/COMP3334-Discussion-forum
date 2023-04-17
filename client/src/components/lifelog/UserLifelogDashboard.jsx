@@ -29,7 +29,9 @@ const UserLifelogDashboard = ({ user, match }) => {
     console.log("get life logs from ", selectedUser);
 
     if (selectedUser) {
-      const { data: lifelogs } = await http.get(`${api.lifelogEndPoint}/get/${selectedUser}`);
+      const { data: lifelogs } = await http.get(
+        `${api.lifelogEndPoint}/get/${selectedUser}`
+      );
 
       setAllLifelogs(lifelogs);
     }
@@ -37,7 +39,7 @@ const UserLifelogDashboard = ({ user, match }) => {
 
   useEffect(() => {
     const selectedUser = match.params.username;
-    console.log('match', match)
+    console.log("match", match);
     getlifelogs(selectedUser);
   }, [match.params.selectedUser]);
 
@@ -62,91 +64,104 @@ const UserLifelogDashboard = ({ user, match }) => {
   console.log("UserLifelogDashboard");
 
   const handleModalClose = () => {
-    setShowModal(false)
-  }
+    setShowModal(false);
+  };
 
   const createLifeLog = async () => {
-    if(!!inputTitle && inputTitle.length < 10) {
+    if (!!inputTitle && inputTitle.length < 10) {
       toast.error("Title must be more than 10 characters");
     }
-    if(!!inputDescription && inputTitle.length < 10) {
+    if (!!inputDescription && inputTitle.length < 10) {
       toast.error("Description must be more than 10 characters");
     }
 
-    if ((!!inputTitle && inputTitle.length > 9) && (!!inputDescription && inputTitle.length > 9)) {
+    if (
+      !!inputTitle &&
+      inputTitle.length > 9 &&
+      !!inputDescription &&
+      inputTitle.length > 9
+    ) {
       //  sending api to add lifelogs
       try {
         // const { data } = this.state;
-        await http.post(`${api.lifelogEndPoint}/create`, {
-          title: inputTitle,
-          description: inputDescription,
-          author: selectedUser
-        }).then((res) => {
-          if (res.status === 200) {
-            setShowModal(false);
-            setInputTitle("");
-            setInputDescription("");
-            getlifelogs(selectedUser);
+        await http
+          .post(`${api.lifelogEndPoint}/create`, {
+            title: inputTitle,
+            description: inputDescription,
+            author: selectedUser,
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              setShowModal(false);
+              setInputTitle("");
+              setInputDescription("");
+              getlifelogs(selectedUser);
+            } else {
+              toast.error("Network error");
+              setShowModal(false);
+            }
+            // console.log('create response', res);
+          });
 
-          } else {
-            toast.error('Network error');
-            setShowModal(false);
-          }
-          // console.log('create response', res);
-        });
-        
         // window.location = "/dashboard";
       } catch (error) {
         toast.error(error);
       }
     }
-  }
-
-  if (alllifelogs.length === 0)
-    return (
-      <p>
-        There are no lifelogs in the database!
-        <div className="d-flex w-100 justify-content-between m-3">
-          {user && user.username === selectedUser && (
-            <Button className="btn btn-success" variant="primary" onClick={() => setShowModal(true)}>
-              New Lifelog
-            </Button>
-          )}
-          {/* <Link to={`/personallifelog/${selectedUser}/tags`} className="btn btn-secondary">
-            Tags
-          </Link> */}
-        </div>
-      </p>
-    );
+  };
 
   return (
-    <React.Fragment>
-      <Jumotron title={`Life logs of ${selectedUser}`} />
-      <div className="row">
-        <div className="col-3">
-        </div>
-        <div className="col">
-          {user && user.username === selectedUser && (
-            <Button className="btn btn-success" variant="primary" onClick={() => setShowModal(true)}>
-              New Lifelog
-            </Button>
-          )}
-          <Lifelogs
-            lifelogs={alllifelogs}
-            onDelete={handlePostDelete}
-            user={user}
-            selectedUser={selectedUser}
-          />
-          {/* <Pagination
+    <>
+      {alllifelogs.length === 0 && (
+        <p>
+          There are no lifelogs in the database!
+          <div className="d-flex w-100 justify-content-between m-3">
+            {user && user.username === selectedUser && (
+              <Button
+                className="btn btn-success"
+                variant="primary"
+                onClick={() => setShowModal(true)}
+              >
+                New Lifelog
+              </Button>
+            )}
+          </div>
+        </p>
+      )}
+
+      {alllifelogs && alllifelogs.length > 0 && (
+        <React.Fragment>
+          <Jumotron title={`Life logs of ${selectedUser}`} />
+          <div className="row">
+            <div className="col-3"></div>
+            <div className="col">
+              {user && user.username === selectedUser && (
+                <Button
+                  className="btn btn-success"
+                  variant="primary"
+                  onClick={() => setShowModal(true)}
+                >
+                  Add New Lifelog
+                </Button>
+              )}
+              <Lifelogs
+                lifelogs={alllifelogs}
+                onDelete={handlePostDelete}
+                user={user}
+                selectedUser={selectedUser}
+              />
+              {/* <Pagination
             itemsCount={alllifelogs.length}
             currentPage={currentPage}
             pageSize={pageSize}
             onPageChange={handlePageChange}
           /> */}
-        </div>
-        <div className="col-3">
-        </div>
-      </div>
+            </div>
+            <div className="col-3"></div>
+          </div>
+        </React.Fragment>
+      )}
+
       <Modal show={showModal} onHide={handleModalClose}>
         <Modal.Header closeButton>
           <Modal.Title>New Lifelog</Modal.Title>
@@ -155,16 +170,16 @@ const UserLifelogDashboard = ({ user, match }) => {
           <p>Add your new lifelog here</p>
           <Input
             label={"Title"}
-            value={inputTitle} 
+            value={inputTitle}
             onChange={(e) => {
-              setInputTitle(e.target.value)
+              setInputTitle(e.target.value);
             }}
           />
           <Input
             label={"Description"}
-            value={inputDescription} 
+            value={inputDescription}
             onChange={(e) => {
-              setInputDescription(e.target.value)
+              setInputDescription(e.target.value);
             }}
           />
         </Modal.Body>
@@ -177,13 +192,13 @@ const UserLifelogDashboard = ({ user, match }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
       <ToastContainer />
-    </React.Fragment>
+    </>
   );
 };
 
 export default UserLifelogDashboard;
-
 
 // import React, { Component, useState } from "react";
 // import { Link } from "react-router-dom";
@@ -262,8 +277,6 @@ export default UserLifelogDashboard;
 //     const handleModalClose = () => {
 //       setShowModal(false)
 //     }
-
-
 
 //     if (alllifelogs.length === 0)
 //       return (
