@@ -14,11 +14,11 @@ export const GenRSAKeypair = () => {
 }
 
 export const RsaEncrypt = (plainText, publicKeyStr) => {
-    return crypto.AES.encrypt(plainText, publicKeyStr);
+    return crypto.AES.encrypt(plainText, publicKeyStr).toString();
 }
 
 export const RsaDecrypt = (decryptData, privateKeyStr) => {
-    return crypto.AES.decrypt(decryptData.toString(), privateKeyStr);
+    return crypto.AES.decrypt(decryptData.toString(), privateKeyStr).toString();
 }
 
 
