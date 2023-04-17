@@ -16,12 +16,14 @@ import ProtectedRoute from "./components/common/protectedRoute";
 import PostPage from "./components/dashboard/PostPage";
 import UserListDashboard from './components/lifelog/UserListDashboard'
 import UserLifelogDashboard from './components/lifelog/UserLifelogDashboard'
+import Cookies from "universal-cookie";
 
 class App extends Component {
   state = {};
   async componentDidMount() {
     try {
-      const jwt = localStorage.getItem("token");
+      const cookies = new Cookies();
+      const jwt = cookies.get("token")//localStorage.getItem("token");
       const user_jwt = jwtDecode(jwt);
       const user = await http.get(`${api.usersEndPoint}${user_jwt._id}`);
       this.setState({ user: user.data });

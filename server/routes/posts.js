@@ -6,10 +6,43 @@ const { Reply, validateReply } = require("../models/replies");
 const { User } = require("../models/user");
 const auth = require("../middleware/auth");
 const { Tag } = require("../models/tag");
+const jwt = require("jsonwebtoken");
+const {GenRSAKeypair, RsaEncrypt, RsaDecrypt} = require('../common/rsaKeyFunc')
 
 router.get("/", async (req, res) => {
-  let all_posts = await Post.find().populate("author", "name -_id");
-  res.send(all_posts);
+
+  const token = req.headers['x-auth-token']
+
+  const decrypted_jwt = jwt.decode(token)
+
+  if (decrypted_jwt && decrypted_jwt._id) {
+    let user = await User.findById(decrypted_jwt._id);
+
+    if (user && user.publicKeyUser) {
+      const publicKeyUser = user.publicKeyUser
+      let all_posts = await Post.find().populate("author", "name -_id");
+
+
+      decrypt_posts = []
+      if (Array.isArray(all_posts)) {
+        all_posts.forEach(element => {
+          decrypt_posts.push(RsaEncrypt(JSON.stringify(element), publicKeyUser))
+        });
+        res.send({decrypt_posts: decrypt_posts});
+      } else {
+        res.status(400).send("b/e error");
+      }
+      // console.log(all_posts)
+      // all_posts.array().forEach(element => {
+      //   decrypt_posts.append(RsaDecrypt(JSON.stringify(element), publicKeyUser))   
+      // });
+
+      
+      // res.send({decrypt_posts: decrypt_posts});
+    }
+  } else {
+    res.status(400).send("missing jwt");
+  }
 });
 
 router.get("/:id", async (req, res) => {

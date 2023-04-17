@@ -40,16 +40,25 @@ const Dashboard = ({ user }) => {
   useEffect(async () => {
     const { data: allposts } = await http.get(api.postsEndPoint).then((res) => {
       console.log("encryptPosts")
-      console.log(res.data.encryptPosts)
+      console.log(res.data.decrypt_posts)
 
       
       const userPrivateKeyStr = cookies.get('userPrivateKeyStr')
 
       if (userPrivateKeyStr) {
-        const posts = RsaDecrypt(JSON.stringify(res.data.encryptPosts), userPrivateKeyStr)
-        console.log(posts)
 
-        setAllposts(JSON.parse(posts))
+        const enc_posts =  res.data.decrypt_posts
+        const dec_posts = [];
+
+        if(Array.isArray(enc_posts)) {
+          enc_posts.forEach(ele => {
+            const post = RsaDecrypt(ele, userPrivateKeyStr)
+            dec_posts.push(JSON.parse(post))
+          })
+        }
+        console.log(dec_posts)
+
+        setAllposts(dec_posts)
         return posts
       }
   })}, []);
