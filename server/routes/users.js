@@ -27,7 +27,7 @@ router.post("/register", async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     username: req.body.username,
-    password: req.body.password,
+    password: await bcrypt.hash(req.body.password, 10),
     publicKeyUser: req.body.publicKeyUser,
     publicKeyServer: server_keyPair.publicKey,
     privateKeyServer: server_keyPair.privateKey

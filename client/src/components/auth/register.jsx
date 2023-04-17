@@ -50,27 +50,29 @@ class Register extends Form {
 
         const keyPair = GenRSAKeypair();
 
-        // Store keyPair in local file
-        SaveKeyAndDownload(keyPair.privateKey, 'clientPrivateKey')
-        SaveKeyAndDownload(keyPair.publicKey, 'clientPublicKey')
+        console.log("Generate key Pair")
+        console.log(JSON.stringify(keyPair.publicKey))
+        console.log(JSON.stringify(keyPair.privateKey))
 
         // const  RsaEncrypt()
         const registerBody = {
           ...this.state.data,
-          password: RsaEncrypt(this.state.data.password, keyPair.publicKey),
-          password2: RsaEncrypt(this.state.data.password2, keyPair.publicKey),
+          password: this.state.data.password,
+          password2: this.state.data.password2,
           publicKeyUser: keyPair.publicKey
         }
   
   
-  
         const response = await userService.register(registerBody);
         console.log(response);
+        // Store keyPair in local file
+        SaveKeyAndDownload(keyPair.privateKey, 'clientPrivateKey')
+        SaveKeyAndDownload(keyPair.publicKey, 'clientPublicKey')
         SaveKeyAndDownload(response.data.publicKeyUser, 'serverPublicKey')
         
         
         localStorage.setItem("token", response.headers["x-auth-token"]);
-        window.location = "/dashboard";
+        // window.location = "/dashboard";
       } catch (ex) {
         if (ex.response && ex.response.status === 400) {
           // console.log(JSON.parse(JSON.stringify(ex)))
@@ -85,6 +87,9 @@ class Register extends Form {
       }
     }
   };
+
+
+  
 
 
   render() {
