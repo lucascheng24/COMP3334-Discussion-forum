@@ -6,6 +6,7 @@ import { Redirect } from "react-router-dom";
 import * as userService from "../../services/userService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/react-toastify.esm";
+import {GenRSAKeypair, RsaEncrypt} from '../common/rsaKeyFunc'
 
 class Register extends Form {
   state = {
@@ -45,14 +46,15 @@ class Register extends Form {
     if (validflag) {
       try {
         console.log('all pass')
-      
 
-      
-  
+        const keyPair = GenRSAKeypair();
+
+        // const  RsaEncrypt()
         const registerBody = {
           ...this.state.data,
-          // password: encrypted,
-          publicKeyUser: ''
+          password: RsaEncrypt(this.state.data.password, keyPair.publicKey),
+          password2: RsaEncrypt(this.state.data.password2, keyPair.publicKey),
+          publicKeyUser: keyPair.publicKey
         }
   
   

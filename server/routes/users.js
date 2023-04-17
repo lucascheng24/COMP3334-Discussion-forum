@@ -10,17 +10,28 @@ const auth = require("../middleware/auth");
 const isAdmin = require("../middleware/admin");
 const { valid } = require("joi");
 const router = express.Router();
+import {GenRSAKeypair, RsaEncrypt} from '../common/rsaKeyFunc'
 
 router.post("/register", async (req, res) => {
   const { error } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("User already registered");
+
+
+  // gen server keyPair
+  const server_keyPair = GenRSAKeypair();
+
+
   user = new User({
     name: req.body.name,
     email: req.body.email,
     username: req.body.username,
-    password: await bcrypt.hash(req.body.password, 10),
+    password: req.body.password,
+    publicKeyUser: req.body.publicKeyUser,
+    publicKeyServer: server_keyPair.publicKey,
+    privateKeyServer: server_keyPair.privateKey
+    
   });
   try {
     await user.save();
