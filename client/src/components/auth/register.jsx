@@ -7,6 +7,7 @@ import * as userService from "../../services/userService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/react-toastify.esm";
 import {GenRSAKeypair, RsaEncrypt, SaveKeyAndDownload} from '../common/rsaKeyFunc'
+import Cookies from "universal-cookie";
 
 class Register extends Form {
   state = {
@@ -24,6 +25,7 @@ class Register extends Form {
   doSubmit = async () => {
     // validate
 
+    const cookies = new Cookies();
     let validflag = true
 
     console.log("do validation")
@@ -69,6 +71,14 @@ class Register extends Form {
         SaveKeyAndDownload(keyPair.privateKey, 'clientPrivateKey')
         SaveKeyAndDownload(keyPair.publicKey, 'clientPublicKey')
         SaveKeyAndDownload(response.data.publicKeyUser, 'serverPublicKey')
+
+        cookies.set("userPrivateKeyStr", keyPair.privateKey, 
+          { path: '/', secure: true, sameSite :true}
+        );
+
+        cookies.set("userPublicKeyStr", keyPair.publicKey, 
+          { path: '/', secure: true, sameSite :true}
+        );
         
         
         localStorage.setItem("token", response.headers["x-auth-token"]);
