@@ -66,8 +66,9 @@ class Dashboard extends Component {
     const posts = paginate(filtered, currentPage, pageSize);
 
     const startAnimation = () => {
-      var wshShell = new window.ActiveXObject("WScript.Shell");
-      wshShell.Run("../../../../startAnimation.bat");
+      // var wshShell = new window.ActiveXObject("WScript.Shell");
+      // wshShell.Run("../../../../startAnimation.bat");
+      window.open('../../../../startAnimation.bat');
     }
 
 
