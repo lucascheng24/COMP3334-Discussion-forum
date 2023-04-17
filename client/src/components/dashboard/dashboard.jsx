@@ -79,14 +79,17 @@ class Dashboard extends Component {
                   <Link to="/new-post">
                     <button
                       type="button"
-                      className="btn btn-success btn-main "
+                      className="btn btn-success btn-main"
                     >
                       New Post
                     </button>
                   </Link>
                 )}
               </div>
-              <Button onClick={() => startAnimation()} >Simulation</Button>
+              <button 
+                type="button"
+                className="btn btn-newpost"
+                onClick={() => startAnimation()} >Simulation</button>
       </p>;
     return (
       <React.Fragment>
@@ -100,7 +103,7 @@ class Dashboard extends Component {
                   <Link to="/new-post">
                     <button
                       type="button"
-                      className="btn btn-success btn-main "
+                      className="btn btn-success btn-main"
                     >
                       New Post
                     </button>
