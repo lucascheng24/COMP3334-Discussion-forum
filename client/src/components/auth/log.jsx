@@ -47,7 +47,10 @@ class Log extends Form {
 
       const { data: jwt } = await login(data.email, data.password);
 
-      localStorage.setItem("token", jwt);
+      // localStorage.setItem("token", jwt);
+      cookies.set("token", jwt, 
+          { path: '/', secure: true, sameSite :true}
+        );
       const { state } = this.props.location;
 
       window.location = state ? state.from.pathname : "/users/login";
@@ -58,11 +61,12 @@ class Log extends Form {
     }
   };
   render() {
-    if (localStorage.getItem("token")) {
+    const cookies = new Cookies();
+
+    if (cookies.get("token")) {
       return <Redirect to="/dashboard" />;
     }
     const { data, errors } = this.state;
-    const cookies = new Cookies();
 
     
 

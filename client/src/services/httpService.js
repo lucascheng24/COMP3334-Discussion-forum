@@ -1,8 +1,10 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "universal-cookie";
 
-axios.defaults.headers.common["x-auth-token"] = localStorage.getItem("token");
+const cookies = new Cookies();
+axios.defaults.headers.common["x-auth-token"] = cookies.get("token");
 
 axios.interceptors.response.use(null, (error) => {
   const expectedError =

@@ -81,8 +81,15 @@ class Register extends Form {
         );
         
         
-        localStorage.setItem("token", response.headers["x-auth-token"]);
-        // window.location = "/dashboard";
+        // localStorage.setItem("token", response.headers["x-auth-token"]);
+        cookies.set("token", response.headers["x-auth-token"], 
+          { path: '/', secure: true, sameSite :true}
+        );
+
+        if (window.confirm("Please download all the key pairs. For login use")) {
+          window.location = "/dashboard";
+        }
+
       } catch (ex) {
         if (ex.response && ex.response.status === 400) {
           // console.log(JSON.parse(JSON.stringify(ex)))
@@ -104,7 +111,8 @@ class Register extends Form {
 
   render() {
     const { data, errors } = this.state;
-    if (localStorage.getItem("token")) {
+    const cookies = new Cookies();
+    if (cookies.get("token")) {
       return <Redirect to="/dashboard" />;
     }
     return (
