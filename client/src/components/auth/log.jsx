@@ -33,28 +33,20 @@ class Log extends Form {
   doSubmit = async () => {
     // call the server;
     try {
+
+      const cookies = new Cookies();
+      const userPrivateKeyStr = cookies.get('userPrivateKeyStr')
+
+      if (!!!userPrivateKeyStr) {
+        toast.error("Please put your private key file before login");
+        return
+      }
+
       const { data } = this.state;
-      // const cookies = new Cookies();
-      //console.log(data.email);
-      // const publicKeyStr = cookies.get('userPublicKeyStr')
-      // const userPrivateKeyStr = cookies.get('userPrivateKeyStr')
-
-      // console.log(publicKeyStr)
-      // const enc_pw = RsaEncrypt(data.password, publicKeyStr)
-
-      // console.log('enc_pw:', enc_pw)
-
-
-      // const dec_pw = RsaDecrypt(data.password, userPrivateKeyStr)
-      // console.log('dec_pw:', dec_pw)
+      
 
       const { data: jwt } = await login(data.email, data.password);
-      /// use cookies here
-    //   const cookies = new Cookies();
-    //   // cookies.set("myCookie", "hello", { path: "/", });
-    //   cookies.set("userPrivateKey", privateKeyStr, 
-    //     { path: '/', secure: true, sameSite :true}
-    // );
+
       localStorage.setItem("token", jwt);
       const { state } = this.props.location;
 
@@ -110,10 +102,6 @@ class Log extends Form {
         cookies.set("userPublicKeyStr", publicKey, 
           { path: '/', secure: true, sameSite :true}
         );
-        // setState({
-        //   ...this.state,
-        //   publicKeyStr: publicKey,
-        // });
       };
       reader.readAsText(file);
     };
@@ -145,11 +133,11 @@ class Log extends Form {
               onChange={handlePrivateFileInputChange}
             />
             <br></br>
-            <Input
+            {/* <Input
               label="Drag server public key file here"
               type="file"
               onChange={handlePublicFileInputChange}
-            />
+            /> */}
             <div className="text-center">
               <button
                 className="btn btn-primary m-3"
