@@ -104,7 +104,7 @@ const Dashboard = ({ user }) => {
         </div>
         <button 
           type="button"
-          className="btn btn-success"
+          className="btn btn-success btn-sim"
           onClick={() => startAnimation()} >
           Simulation
         </button>
@@ -131,7 +131,7 @@ const Dashboard = ({ user }) => {
                   </Link>
                   <button 
                     type="button"
-                    className="btn btn-success btn-primary"
+                    className="btn btn-primary btn-sim"
                     onClick={() => startAnimation()} >
                     Simulation
                   </button>
