@@ -1,7 +1,7 @@
 const forge = require('node-forge');
 const crypto = require('crypto-js');
 
-export const GenRSAKeypair = () => {
+const GenRSAKeypair = () => {
     const keyPair = forge.pki.rsa.generateKeyPair({ bits: 2048 });
     const publicKeyPem = forge.pki.publicKeyToPem(keyPair.publicKey);
     const privateKeyPem = forge.pki.privateKeyToPem(keyPair.privateKey);
@@ -13,14 +13,18 @@ export const GenRSAKeypair = () => {
 
 }
 
-export const RsaEncrypt = (plainText, publicKeyStr) => {
+const RsaEncrypt = (plainText, publicKeyStr) => {
     return crypto.AES.encrypt(plainText, publicKeyStr).toString();
 }
 
-export const RsaDecrypt = (decryptData, privateKeyStr) => {
+const RsaDecrypt = (decryptData, privateKeyStr) => {
     return crypto.AES.decrypt(decryptData.toString(), privateKeyStr).toString();
 }
 
+
+exports.GenRSAKeypair = GenRSAKeypair;
+exports.RsaEncrypt = RsaEncrypt;
+exports.RsaDecrypt = RsaDecrypt;
 
 // // Generate RSA key pair
         // const keyPair = forge.pki.rsa.generateKeyPair({ bits: 2048 });

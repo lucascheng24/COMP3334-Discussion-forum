@@ -21,6 +21,29 @@ export const RsaDecrypt = (decryptData, privateKeyStr) => {
     return crypto.AES.decrypt(decryptData.toString(), privateKeyStr).toString();
 }
 
+//  save key and download as txt
+export const SaveKeyAndDownload = (keyStr, fileName) => {
+    const keyBlob = new Blob([keyStr], { type: 'text/plain' });
+  
+    const keyUrl = URL.createObjectURL(keyBlob);
+  
+    const keyLink = document.createElement('a');
+  
+    keyLink.href = keyUrl;
+
+    const download_filename = fileName +'.txt'
+  
+    keyLink.download = download_filename;
+  
+    document.body.appendChild(keyLink);
+  
+    keyLink.click();
+  
+    document.body.removeChild(keyLink);
+  
+    URL.revokeObjectURL(keyUrl);
+};
+
 
 // // Generate RSA key pair
         // const keyPair = forge.pki.rsa.generateKeyPair({ bits: 2048 });

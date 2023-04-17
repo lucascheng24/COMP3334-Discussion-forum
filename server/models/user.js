@@ -69,6 +69,7 @@ function validateUser(user) {
       .required(),
     password: Joi.string().required(),
     username: Joi.string().required().min(3),
+    publicKeyUser: Joi.string().required()
   });
   return schema.validate(user);
 }

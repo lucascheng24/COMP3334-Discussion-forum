@@ -6,7 +6,7 @@ import { Redirect } from "react-router-dom";
 import * as userService from "../../services/userService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/react-toastify.esm";
-import {GenRSAKeypair, RsaEncrypt} from '../common/rsaKeyFunc'
+import {GenRSAKeypair, RsaEncrypt, SaveKeyAndDownload} from '../common/rsaKeyFunc'
 
 class Register extends Form {
   state = {
@@ -20,6 +20,7 @@ class Register extends Form {
     password: Joi.string().required().label("Password"),
     password2: Joi.string().required().label("Confirm Password"),
   };
+
   doSubmit = async () => {
     // validate
 
@@ -49,6 +50,10 @@ class Register extends Form {
 
         const keyPair = GenRSAKeypair();
 
+        // Store keyPair in local file
+        SaveKeyAndDownload(keyPair.privateKey, 'clientPrivateKey')
+        SaveKeyAndDownload(keyPair.publicKey, 'clientPublicKey')
+
         // const  RsaEncrypt()
         const registerBody = {
           ...this.state.data,
@@ -76,8 +81,6 @@ class Register extends Form {
         }
       }
     }
-
-    
   };
 
 

@@ -10,7 +10,7 @@ const auth = require("../middleware/auth");
 const isAdmin = require("../middleware/admin");
 const { valid } = require("joi");
 const router = express.Router();
-import {GenRSAKeypair, RsaEncrypt} from '../common/rsaKeyFunc'
+const {GenRSAKeypair, RsaEncrypt} = require('../common/rsaKeyFunc')
 
 router.post("/register", async (req, res) => {
   const { error } = validateUser(req.body);
@@ -42,7 +42,7 @@ router.post("/register", async (req, res) => {
     res
       .header("x-auth-token", token)
       .header("access-control-expose-headers", "x-auth-token")
-      .send(_.pick(user, ["_id", "name", "email"]));
+      .send(_.pick(user, ["_id", "name", "email", "publicKeyServer"]));
   } catch (err) {
     console.log("error: ", err);
   }
