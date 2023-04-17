@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 const Posts = (props) => {
   const { posts } = props;
   return (
-    <div className="list-group">
+    <div className="list-group Dash_post">
       {/* reverse the posts: from new to old */}
       {posts.slice(0).reverse().map((post) => (
       // {posts.map((post) => (
         <Link
-          className="list-group-item list-group-item-action flex-column align-items-start"
+          className="list-group-item list-group-item-action flex-column align-items-start shadow-sm"
           to={`/post/${post._id}`}
+          style={{marginTop:"1rem", marginBottom:"1rem", backgroundColor:"white"}}
         >
           <div className="d-flex w-100 justify-content-between" key={post._id}>
             <h5 className="mb-1">{post.title}</h5>
