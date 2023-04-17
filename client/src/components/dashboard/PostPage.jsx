@@ -113,7 +113,7 @@ class PostPage extends Component {
                 <PersonCircle size={30} className="mr-2" />
                 Posted by {(post.author && post.author.username) || 0}
               </div>
-              <p class="mb-1">
+              <p className="mb-1">
                 <Moment fromNow>{post.time}</Moment>
               </p>
             </div>
