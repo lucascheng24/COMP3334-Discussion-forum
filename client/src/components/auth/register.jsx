@@ -20,19 +20,65 @@ class Register extends Form {
     password2: Joi.string().required().label("Confirm Password"),
   };
   doSubmit = async () => {
-    try {
-      const response = await userService.register(this.state.data);
-      console.log(response);
-      localStorage.setItem("token", response.headers["x-auth-token"]);
-      window.location = "/dashboard";
-    } catch (ex) {
-      if (ex.response && ex.response.status === 400) {
-        //const errors = { ...this.state.errors };
-        toast.error("User Already Registered");
-        // this.setState({ errors });
+    // validate
+
+    let validflag = true
+
+    console.log("do validation")
+
+    if (!this.state.data.username || this.state.data.username.length < 5) {
+      toast.error("Length of username must longer than 5")
+      console.log("username validation")
+      validflag = false
+    }
+    if (!this.state.data.name || this.state.data.name.length < 5) {
+      toast.error("Length of name must longer than 5")
+      console.log("name validation")
+      validflag = false
+    }
+    if (!this.state.data.password || this.state.data.password.length < 5) {
+      toast.error("Length of password must longer than 5")
+      console.log("password validation")
+      validflag = false
+    }
+
+    if (validflag) {
+      try {
+        console.log('all pass')
+      
+
+      
+  
+        const registerBody = {
+          ...this.state.data,
+          // password: encrypted,
+          publicKeyUser: ''
+        }
+  
+  
+  
+        const response = await userService.register(registerBody);
+        console.log(response);
+        localStorage.setItem("token", response.headers["x-auth-token"]);
+        window.location = "/dashboard";
+      } catch (ex) {
+        if (ex.response && ex.response.status === 400) {
+          // console.log(JSON.parse(JSON.stringify(ex)))
+          // console.log(JSON.parse(JSON.stringify(ex.response)))
+          
+          toast.error(ex.response.data);
+          // this.setState({ errors });
+        } else {
+          console.log(ex)
+          toast.error(ex);
+        }
       }
     }
+
+    
   };
+
+
   render() {
     const { data, errors } = this.state;
     if (localStorage.getItem("token")) {
