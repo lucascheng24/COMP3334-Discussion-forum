@@ -6,6 +6,7 @@ import Form from "../common/form";
 import http from "../../services/httpService";
 import { api } from "../../config.js";
 import { createpost } from "../../services/postCreateService";
+import './dashboardCss.css'
 
 class NewPost extends Form {
   state = {
@@ -61,8 +62,7 @@ class NewPost extends Form {
         <div className="container-lg">
           <h1 className="text-center m-2">Create a New Discussion</h1>
           <div
-            className="container m-4 p-4 rounded"
-            style={{ backgroundColor: "#F1F1F1" }}
+            className="container m-4 p-4 rounded createpost"
           >
             <form onSubmit={this.handleSubmit}>
               <Input
@@ -82,6 +82,7 @@ class NewPost extends Form {
                   type="description"
                   id="description"
                   className="form-control"
+                  style={{height: "12rem"}}
                 />
                 {errors.description && (
                   <div className="alert-info">{errors.description}</div>
@@ -109,6 +110,7 @@ class NewPost extends Form {
                 <button
                   className="btn btn-primary mt-4"
                   disabled={this.validate()}
+                  style={{marginLeft:"61.5rem"}}
                 >
                   Submit
                 </button>
