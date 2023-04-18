@@ -195,14 +195,14 @@ const UserLifelogDashboard = ({ user, match }) => {
           <Input
             label={"Title"}
             value={inputTitle}
-            maxLength={80}
+            maxLength={40}
             onChange={(e) => {
               setInputTitle(e.target.value);
             }}
           />
           <Input
             label={"Description"}
-            maxLength={180}
+            maxLength={50}
             value={inputDescription}
             onChange={(e) => {
               setInputDescription(e.target.value);
