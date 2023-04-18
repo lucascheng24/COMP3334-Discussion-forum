@@ -88,7 +88,7 @@ class Register extends Form {
           { path: '/', secure: true, sameSite :true}
         );
 
-        if (window.confirm("Please download all the key pairs. For login use")) {
+        if (window.confirm("Please download all the key pairs. For login use. \n Please allow multipe file download")) {
           window.location = "/dashboard";
         }
 
