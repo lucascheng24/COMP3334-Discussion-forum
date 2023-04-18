@@ -71,7 +71,7 @@ class NewPost extends Form {
                 label="Title"
                 name="title"
                 type="text"
-                maxLength={30}
+                maxLength={25}
                 error={errors.title}
               />
               <div className="form-group">
@@ -83,7 +83,7 @@ class NewPost extends Form {
                   type="description"
                   id="description"
                   className="form-control"
-                  maxLength={50}
+                  maxLength={45}
                   style={{height: "12rem"}}
                 />
                 {errors.description && (
