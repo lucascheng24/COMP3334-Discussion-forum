@@ -81,6 +81,14 @@ class Log extends Form {
 
         console.log('challenge_R: ', dec_challenge_R)
         return dec_challenge_R;
+      }).catch((error) => {
+        console.log('login http1', JSON.parse(JSON.stringify(error)))
+        console.log('login http1 response', JSON.parse(JSON.stringify(error.response)))
+
+        const error_response = error.response
+
+        toast.error(error_response.data.toString())
+
       }).then((dec_challenge_R) => {
 
         // Make the second request
@@ -103,6 +111,12 @@ class Log extends Form {
           return response.data;
         }).catch((error) => {
           console.log(error);
+          console.log('login http2', JSON.parse(JSON.stringify(error)))
+          console.log('login http2 response', JSON.parse(JSON.stringify(error.response)))
+  
+          const error_response = error.response
+  
+          toast.error(error_response.data.toString())
         });
       })
       
