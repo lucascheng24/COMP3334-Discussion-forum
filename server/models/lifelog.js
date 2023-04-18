@@ -6,14 +6,14 @@ const lifelogSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    minlength: 10,
+    minlength: 5,
     maxlength: 80,
   },
   description: {
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 1024,
+    maxlength: 180,
     required: true,
   },
   author: {
