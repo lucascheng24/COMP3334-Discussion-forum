@@ -47,6 +47,10 @@ class Log extends Form {
         toast.error("Please put your private key file before login");
         return
       }
+      if (!!!userPublicKeyStr) {
+        toast.error("Please put your public key file before login");
+        return
+      }
 
       const { data } = this.state;
       

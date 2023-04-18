@@ -3,9 +3,13 @@ import {Link} from 'react-router-dom'
 
 const UserItems = (props) => {
   const { users } = props;
+
+  // Check if users is an array, or return an empty array
+  const userList = Array.isArray(users) ? users : [];
+
   return (
     <div className="list-group">
-      {users.map((user) => (
+      {userList.map((user) => (
         <Link
           className="list-group-item list-group-item-action flex-column align-items-start shadow-sm"
           to={`/personallifelog/${user.username}`}

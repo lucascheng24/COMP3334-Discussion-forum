@@ -63,14 +63,16 @@ class Register extends Form {
           password2: this.state.data.password2,
           publicKeyUser: keyPair.publicKey
         }
+
+        const username = this.state.data.username??``
   
   
         const response = await userService.register(registerBody);
         console.log(response);
         // Store keyPair in local file
-        SaveKeyAndDownload(keyPair.privateKey, 'clientPrivateKey')
-        SaveKeyAndDownload(keyPair.publicKey, 'clientPublicKey')
-        SaveKeyAndDownload(response.data.publicKeyUser, 'serverPublicKey')
+        SaveKeyAndDownload(keyPair.privateKey, 'clientPrivateKey_' + username)
+        SaveKeyAndDownload(keyPair.publicKey, 'clientPublicKey_'+ username)
+        // SaveKeyAndDownload(response.data.publicKeyUser, 'serverPublicKey_'+ username)
 
         cookies.set("userPrivateKeyStr", keyPair.privateKey, 
           { path: '/', secure: true, sameSite :true}
