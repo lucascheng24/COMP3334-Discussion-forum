@@ -54,58 +54,93 @@ class Log extends Form {
       // const { data: jwt } = await login(data.email, data.password);
 
       // Create an Axios instance with the Connection header set to keep-alive
-      const http_alive = axios.create({
-        headers: {
-          'Connection': 'keep-alive'
-        }
-      });
+      // const http_alive = axios.create({
+      //   headers: {
+      //     'Connection': 'keep-alive'
+      //   }
+      // });
 
       const user_hash_pw = SHA256(data.password).toString()
       const ciphertext = caesarCipherEncrypt(userPublicKeyStr, user_hash_pw)
-      
+      var jwt = ""
 
-      // Make the first request
-      const { data: jwt } = await http_alive.post(api.keepAliveEndPoint + 'login1', {
+      // Make the first request and return the decrypted challenge value
+      axios.post(api.keepAliveEndPoint + 'login1', {
         email: data.email,
         pwEncPuk: ciphertext
-      }).then(async (response) => {
+      }).then((response) => {
         console.log(response.data.pw_enc_puk_enc_R);
 
         const w_enc_Puk_enc_R = response.data.pw_enc_puk_enc_R
-
         const Puk_enc_R = caesarCipherDecrypt(w_enc_Puk_enc_R, user_hash_pw)
-
         const dec_challenge_R = RsaDecrypt(Puk_enc_R, userPrivateKeyStr)
 
         console.log('challenge_R: ', dec_challenge_R)
-
+        return dec_challenge_R;
+      }).then((dec_challenge_R) => {
 
         // Make the second request
-        return http_alive.post(api.keepAliveEndPoint + 'login2', {
-          //  send R
+        axios.post(api.keepAliveEndPoint + 'login2', {
           email: data.email,
           challenge_R: dec_challenge_R
         }).then((response) => {
           console.log('second request R');
           console.log(response.data);
-          return response.data
+          jwt = response.data.token
 
+          //  get the jwt and route to other page
+          cookies.set("token", jwt, 
+            { path: '/', secure: true, sameSite :true}
+          );
+          const { state } = this.props.location;
 
+          window.location = state ? state.from.pathname : "/users/login";
 
+          return response.data;
         }).catch((error) => {
           console.log(error);
         });
-      }).catch((error) => {
-        console.log(error);
-      });
+      })
+      
+
+      // // Make the first request
+      // const { data: dec_challenge_R } = await axios.post(api.keepAliveEndPoint + 'login1', {
+      //   email: data.email,
+      //   pwEncPuk: ciphertext
+      // }).then(async (response) => {
+      //   console.log(response.data.pw_enc_puk_enc_R);
+
+      //   const w_enc_Puk_enc_R = response.data.pw_enc_puk_enc_R
+
+      //   const Puk_enc_R = caesarCipherDecrypt(w_enc_Puk_enc_R, user_hash_pw)
+
+      //   const dec_challenge_R = RsaDecrypt(Puk_enc_R, userPrivateKeyStr)
+
+      //   console.log('challenge_R: ', dec_challenge_R)
+
+
+        
+      //   return dec_challenge_R
+      // }).catch((error) => {
+      //   console.log(error);
+      // })
+      
+      // // Make the second request
+      // const { data: jwt } = await axios.post(api.keepAliveEndPoint + 'login2', {
+      //   //  send R
+      //   email: data.email,
+      //   challenge_R: dec_challenge_R
+      // }).then((response) => {
+      //   console.log('second request R');
+      //   console.log(response.data);
+      //   return response.data
+
+      // }).catch((error) => {
+      //   console.log(error);
+      // });
 
       // localStorage.setItem("token", jwt);
-      cookies.set("token", jwt, 
-        { path: '/', secure: true, sameSite :true}
-      );
-      const { state } = this.props.location;
-
-      window.location = state ? state.from.pathname : "/users/login";
+      
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         toast.error("Invalid Email Or Password");

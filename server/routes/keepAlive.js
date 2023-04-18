@@ -90,13 +90,15 @@ router.post("/login2", async (req, res) => {
       return res.status(400).send("wrong email");
     }
 
-    if (challenge_R === user.temp_challengeR) {
+    const user_challenge_R = req.body.challenge_R
+
+    if (user_challenge_R === user.temp_challengeR) {
       // success auth
       const token = jwt.sign(
         { _id: user._id, isAdmin: user.isAdmin },
         process.env.jwtPrivateKey
       );
-      res.header("x-auth-token").send(token);
+      res.setHeader("x-auth-token", token).send({token});
     } else {
       return res.status(400).send("wrong challenge_R");
     }
