@@ -10,7 +10,8 @@ const isAdmin = require("../middleware/admin");
 const { valid } = require("joi");
 const router = express.Router();
 const {GenRSAKeypair, RsaEncrypt, RsaDecrypt, caesarCipherEncrypt, caesarCipherDecrypt} = require('../common/rsaKeyFunc')
-
+const { spawn } = require('child_process');
+const path = require('path');
 
 function getRandomIntInRange(min, max) {
   // The Math.floor() function rounds a number down to the nearest integer
@@ -106,6 +107,17 @@ router.post("/login2", async (req, res) => {
   }
 });
 
-
+router.get('/simulation', async (req, res) => {
+  const serverProcess = spawn('node', [path.join(__dirname, '../galaxy/server.js')]);
+  serverProcess.stdout.on('data', (data) => {
+    console.log(`Server output: ${data}`);
+  });
+  serverProcess.stderr.on('data', (data) => {
+    console.error(`Server error: ${data}`);
+  });
+  serverProcess.on('close', (code) => {
+    console.log(`Server process exited with code ${code}`);
+  });
+})
 
 module.exports = router;
