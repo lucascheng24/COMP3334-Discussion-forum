@@ -1,6 +1,6 @@
 import React from "react";
 
-const Input = ({ name, label, value, onChange, error, type }) => {
+const Input = ({ name, label, value, onChange, error, type, maxLength }) => {
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
@@ -11,6 +11,7 @@ const Input = ({ name, label, value, onChange, error, type }) => {
         type={type}
         id={name}
         className="form-control"
+        maxLength={maxLength}
       />
       {error && <div className="alert-info p-2 m-12" role="alert">{error}</div>}
     </div>
