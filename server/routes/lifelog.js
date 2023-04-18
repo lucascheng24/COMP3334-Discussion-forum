@@ -1,7 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 const config = require("config");
 const _ = require("lodash");
 const Joi = require("joi");

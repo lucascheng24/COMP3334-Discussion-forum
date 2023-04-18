@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "bcrypt": "3.0.8",
     "config": "^3.3.3",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
