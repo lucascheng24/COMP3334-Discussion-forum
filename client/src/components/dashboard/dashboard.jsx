@@ -6,9 +6,7 @@ import Posts from "./posts";
 import { paginate } from "../../utils/paginate";
 import { api } from "../../config.js";
 import http from "../../services/httpService";
-import Jumbotron from "../common/jumbotron";
 import './dashboardCss.css'
-import { Button } from "react-bootstrap";
 import {GenRSAKeypair, RsaEncrypt, RsaDecrypt, SaveKeyAndDownload} from '../common/rsaKeyFunc'
 import Cookies from "universal-cookie";
 import axios from "axios";

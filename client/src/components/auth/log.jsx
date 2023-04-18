@@ -29,6 +29,7 @@ class Log extends Form {
       email: "",
       passowrd: "",
     },
+    isLoggingIn: false,
   };
   schema = {
     email: Joi.string().required().label("Email ID"),
@@ -38,6 +39,12 @@ class Log extends Form {
   doSubmit = async () => {
     // call the server;
     try {
+
+      this.setState({ ...this.state, isLoggingIn: true });
+
+      setTimeout(()=> {
+        this.setState({ ...this.state, isLoggingIn: false });
+      }, 5000)
 
       const cookies = new Cookies();
       const userPrivateKeyStr = cookies.get('userPrivateKeyStr')
@@ -120,45 +127,6 @@ class Log extends Form {
         });
       })
       
-
-      // // Make the first request
-      // const { data: dec_challenge_R } = await axios.post(api.keepAliveEndPoint + 'login1', {
-      //   email: data.email,
-      //   pwEncPuk: ciphertext
-      // }).then(async (response) => {
-      //   console.log(response.data.pw_enc_puk_enc_R);
-
-      //   const w_enc_Puk_enc_R = response.data.pw_enc_puk_enc_R
-
-      //   const Puk_enc_R = caesarCipherDecrypt(w_enc_Puk_enc_R, user_hash_pw)
-
-      //   const dec_challenge_R = RsaDecrypt(Puk_enc_R, userPrivateKeyStr)
-
-      //   console.log('challenge_R: ', dec_challenge_R)
-
-
-        
-      //   return dec_challenge_R
-      // }).catch((error) => {
-      //   console.log(error);
-      // })
-      
-      // // Make the second request
-      // const { data: jwt } = await axios.post(api.keepAliveEndPoint + 'login2', {
-      //   //  send R
-      //   email: data.email,
-      //   challenge_R: dec_challenge_R
-      // }).then((response) => {
-      //   console.log('second request R');
-      //   console.log(response.data);
-      //   return response.data
-
-      // }).catch((error) => {
-      //   console.log(error);
-      // });
-
-      // localStorage.setItem("token", jwt);
-      
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         toast.error("Invalid Email Or Password");
@@ -171,8 +139,9 @@ class Log extends Form {
     if (cookies.get("token")) {
       return <Redirect to="/dashboard" />;
     }
-    const { data, errors } = this.state;
+    const { data, errors, isLoggingIn } = this.state;
 
+    let disable_5s = false
     
 
     const handlePrivateFileInputChange = (event) => {
@@ -250,9 +219,9 @@ class Log extends Form {
             <div className="text-center">
               <button
                 className="btn btn-primary m-3"
-                disabled={this.validate()}
+                disabled={this.validate() || isLoggingIn}
               >
-                Login
+                {isLoggingIn ? 'Logging in...' : 'Login'}
               </button>
             </div>
           </form>
