@@ -97,6 +97,20 @@ router.get("/get/:id", async (req, res) => {
 
               const encrypt_posts = []
               all_logs.forEach(element => {
+
+                if (element.title.length > 15) {
+                  element.title = element.title.toString().slice(0, 14) + `...`
+                }
+                if (element.description.length > 15) {
+                  element.description = element.description.toString().slice(0, 14) + `...`
+                }
+                if (element.author.length > 15) {
+                  element.author = element.author.toString().slice(0, 14) + `...`
+                }
+                if (element.upvotes.length > 0) {
+                  element.upvotes = []
+                }
+
                 encrypt_posts.push(RsaEncrypt(JSON.stringify(element), publicKeyUser))
               });
               res.send({encrypt_posts: encrypt_posts});

@@ -26,6 +26,20 @@ router.get("/", async (req, res) => {
       decrypt_posts = []
       if (Array.isArray(all_posts)) {
         all_posts.forEach(element => {
+
+          if (element.title.length > 15) {
+            element.title = element.title.toString().slice(0, 14) + `...`
+          }
+          if (element.description.length > 15) {
+            element.description = element.description.toString().slice(0, 14) + `...`
+          }
+          if (element.author.length > 15) {
+            element.author = element.author.toString().slice(0, 14) + `...`
+          }
+          if (element.upvotes.length > 0) {
+            element.upvotes = []
+          }
+
           decrypt_posts.push(RsaEncrypt(JSON.stringify(element), publicKeyUser))
         });
         res.send({decrypt_posts: decrypt_posts});
