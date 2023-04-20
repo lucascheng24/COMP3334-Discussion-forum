@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 80,
+    maxlength: 120,
   },
   tags: {
     type: [tagSchema],
@@ -23,7 +23,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 180,
+    maxlength: 5000,
     required: true,
   },
   author: {
